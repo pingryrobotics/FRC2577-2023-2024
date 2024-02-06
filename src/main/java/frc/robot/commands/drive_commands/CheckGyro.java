@@ -1,16 +1,16 @@
 package frc.robot.commands.drive_commands; //CTV
 
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem; //CTV
+import com.kauailabs.navx.frc.AHRS;
 
 /** An example command that uses an example subsystem. */
 public class CheckGyro extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DriveSubsystem m_subsystem;
-    private final ADIS16448_IMU m_gyro;
+    private final AHRS m_gyro;
     private boolean tilted = false;
     private boolean straight = false;
     private double initGyroPos;
@@ -37,7 +37,7 @@ public class CheckGyro extends Command {
     @Override
     public void initialize() {
         // m_gyro.reset();
-        initGyroPos = m_gyro.getGyroAngleY();
+        initGyroPos = m_gyro.getRoll();
         m_subsystem.drive(0.0, 0, 0, false, false);
         m_subsystem.setX();
         targetTime = 1e18;
@@ -52,7 +52,7 @@ public class CheckGyro extends Command {
             m_subsystem.drive(0.0, 0, 0, false, false);
             m_subsystem.setX();
         }   
-        if (!isDriving && (Math.abs(m_gyro.getGyroAngleY()) > 5)) {
+        if (!isDriving && (Math.abs(m_gyro.getRoll()) > 5)) {
             // started the tilt
             m_subsystem.drive(-0.1, 0, 0, false, false);
             // timerOn = true;

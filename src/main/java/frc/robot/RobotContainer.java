@@ -46,7 +46,6 @@ import frc.robot.commands.grouped_commands.SequentialCommands;
 import frc.robot.commands.shoulder_commands.*;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Shoulder;
 //import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -190,8 +189,10 @@ public class RobotContainer {
         m_robotDrive.zeroHeading();
     }
 
-    public void calibrateGyro() {
-        m_robotDrive.m_gyro.calibrate();
+    public void calibrateGyro() { // TODO: does this work??
+        m_robotDrive.m_gyro.zeroYaw();
+        m_robotDrive.m_gyro.reset();
+        m_robotDrive.m_gyro.resetDisplacement();
     }
 
     

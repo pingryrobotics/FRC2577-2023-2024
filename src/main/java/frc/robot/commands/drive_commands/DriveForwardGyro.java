@@ -1,6 +1,7 @@
 package frc.robot.commands.drive_commands; //CTV
 
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem; //CTV
@@ -9,7 +10,7 @@ import frc.robot.subsystems.ExampleSubsystem; //CTV
 public class DriveForwardGyro extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DriveSubsystem m_subsystem;
-    private final ADIS16448_IMU m_gyro;
+    private final AHRS m_gyro;
     private boolean tilted = false;
     private boolean straight = false;
     private double initGyroPos;
@@ -30,19 +31,19 @@ public class DriveForwardGyro extends Command {
     @Override
     public void initialize() {
         m_gyro.reset();
-        initGyroPos = m_gyro.getGyroAngleY();
+        initGyroPos = m_gyro.getRoll();
         m_subsystem.drive(0.3, 0, 0, false, false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if ((m_gyro.getGyroAngleY() > (initGyroPos + 10)) && !tilted) {
+        if ((m_gyro.getRoll() > (initGyroPos + 10)) && !tilted) {
             // started the tilt
             m_subsystem.drive(0.1, 0, 0, false, false);
             tilted = true;
         } else if (tilted) {
-            if (m_gyro.getGyroAngleY() <= (2 + initGyroPos)) {
+            if (m_gyro.getRoll() <= (2 + initGyroPos)) {
                 straight = true;
             }
         }
