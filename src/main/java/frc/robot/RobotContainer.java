@@ -189,11 +189,11 @@ public class RobotContainer {
         m_robotDrive.zeroHeading();
     }
 
-    public void calibrateGyro() { // TODO: does this work??
-        m_robotDrive.m_gyro.zeroYaw();
-        m_robotDrive.m_gyro.reset();
-        m_robotDrive.m_gyro.resetDisplacement();
-    }
+    // public void calibrateGyro() { // TODO: does this work??
+    //     m_robotDrive.m_gyro.zeroYaw();
+    //     m_robotDrive.m_gyro.reset();
+    //     m_robotDrive.m_gyro.resetDisplacement();
+    // }
 
     
 
