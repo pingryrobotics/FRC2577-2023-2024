@@ -88,13 +88,12 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.resetGyro();
-    // m_robotContainer.enableAutomaticDistance();
+    // m_robotContainer.resetGyro();
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.enableClaw();
 
     // m_robotContainer.enableLimit();
   }

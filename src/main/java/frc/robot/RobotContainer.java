@@ -135,24 +135,24 @@ public class RobotContainer {
         //             -MathUtil.applyDeadband(m_driverJoystick.getTwist() * 0.7 * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.3 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
         //             false, true),
         //             m_robotDrive));
-        // m_robotDrive.setDefaultCommand(
-        //     // The left stick controls translation of the robot.
-        //     // Turning is controlled by the X axis of the right stick.
+        m_robotDrive.setDefaultCommand(
+            // The left stick controls translation of the robot.
+            // Turning is controlled by the X axis of the right stick.
             
-        //     // new RunCommand(
-        //     //     () -> m_robotDrive.drive(
-        //     //         -MathUtil.applyDeadband(m_driverController.getLeftY() * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
-        //     //         -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
-        //     //         -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.6 : 1), OIConstants.kDriveDeadband),
-        //     //         false, true),
-        //     //         m_robotDrive));
-        //     new RunCommand(
-        //             () -> m_robotDrive.drive(
-        //                 -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
-        //                 -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
-        //                 -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * (m_robotDrive.m_slowMode ? 0.6 : 1), OIConstants.kDriveDeadband),
-        //                 true, false),
-        //                 m_robotDrive));
+            // new RunCommand(
+            //     () -> m_robotDrive.drive(
+            //         -MathUtil.applyDeadband(m_driverController.getLeftY() * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
+            //         -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.4 : 1) * m_robotDrive.m_reverseModeCoeff, OIConstants.kDriveDeadband),
+            //         -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * Constants.DriveConstants.kDriveSpeed * (m_robotDrive.m_slowMode ? 0.6 : 1), OIConstants.kDriveDeadband),
+            //         false, true),
+            //         m_robotDrive));
+            new RunCommand(
+                    () -> m_robotDrive.drive(
+                        -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+                        -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * (m_robotDrive.m_slowMode ? 0.6 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+                        true, false),
+                        m_robotDrive));
             
         
         // // Add commands to Autonomous Sendable Chooser
@@ -248,11 +248,11 @@ public class RobotContainer {
         if (m_driverController.getHID().getXButtonPressed()) {
             m_robotDrive.setX();
         } else if (!m_driverController.getHID().getXButton()) {
-            m_robotDrive.drive(
-                        -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
-                        -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
-                        -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * (m_robotDrive.m_slowMode ? 0.6 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
-                        true, false);
+            // m_robotDrive.drive(
+            //             -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+            //             -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+            //             -MathUtil.applyDeadband(m_driverController.getRightX() * 0.7 * (m_robotDrive.m_slowMode ? 0.6 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+            //             true, false);
         }
     
         if (m_claw.autoClaw && !m_claw.objectExisted && m_claw.objectExists) {
