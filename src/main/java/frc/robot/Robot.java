@@ -61,8 +61,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.resetEncodersAndGyro();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_robotContainer.resetEncodersAndGyro();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // m_robotContainer.enableAutomaticDistance();
 
     /*
@@ -73,9 +73,9 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.schedule();
+    // }
   }
 
   /** This function is called periodically during autonomous. */
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.enableClaw();
+    //m_robotContainer.enableClaw();
 
     // m_robotContainer.enableLimit();
   }

@@ -9,9 +9,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
@@ -24,8 +24,8 @@ public class MAXSwerveModule {
   private final RelativeEncoder m_drivingEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
-  private final SparkMaxPIDController m_drivingPIDController;
-  private final SparkMaxPIDController m_turningPIDController;
+  private final SparkPIDController m_drivingPIDController;
+  private final SparkPIDController m_turningPIDController;
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
@@ -39,8 +39,6 @@ public class MAXSwerveModule {
   public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
-
-    m_drivingSparkMax.setInverted(true);
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
@@ -157,14 +155,6 @@ public class MAXSwerveModule {
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
-  }
-
-  public void setDriveSpeed(double speed) {
-    m_drivingSparkMax.set(speed);
-  }
-
-  public void setTurnSpeed(double speed) {
-    m_turningSparkMax.set(speed);
   }
 
   /** Zeroes all the SwerveModule encoders. */
