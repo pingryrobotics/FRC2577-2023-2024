@@ -109,36 +109,15 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 12;
-    public static final int kRearLeftDrivingCanId = 11;
-    public static final int kFrontRightDrivingCanId = 14;
-    public static final int kRearRightDrivingCanId = 13;
+    public static final int kFrontLeftDrivingCanId = 13;
+    public static final int kRearLeftDrivingCanId = 14;
+    public static final int kFrontRightDrivingCanId = 11;
+    public static final int kRearRightDrivingCanId = 12;
 
-    // public static final int kFrontLeftDrivingCanId = 12;
-    // public static final int kRearLeftDrivingCanId = 14;
-    // public static final int kFrontRightDrivingCanId = 11;
-    // public static final int kRearRightDrivingCanId = 13;
-
-    public static final int kFrontLeftTurningCanId = 22;
-    public static final int kRearLeftTurningCanId = 21;
-    public static final int kFrontRightTurningCanId = 24;
-    public static final int kRearRightTurningCanId = 23;
-
-    // public static final int kFrontLeftTurningCanId = 22;
-    // public static final int kRearLeftTurningCanId = 24;
-    // public static final int kFrontRightTurningCanId = 21;
-    // public static final int kRearRightTurningCanId = 23;
-
-
-    // public static final int kFrontLeftDrivingCanId = 12;
-    // public static final int kRearLeftDrivingCanId = 14;
-    // public static final int kFrontRightDrivingCanId = 11;
-    // public static final int kRearRightDrivingCanId = 13;
-
-    // public static final int kFrontLeftTurningCanId = 22;
-    // public static final int kRearLeftTurningCanId = 24;
-    // public static final int kFrontRightTurningCanId = 21;
-    // public static final int kRearRightTurningCanId = 23;
+    public static final int kFrontLeftTurningCanId = 23;
+    public static final int kRearLeftTurningCanId = 24;
+    public static final int kFrontRightTurningCanId = 21;
+    public static final int kRearRightTurningCanId = 22;
 
     public static final boolean kGyroReversed = false;
   }
@@ -147,7 +126,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 12;
+    public static final int kDrivingMotorPinionTeeth = 14;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
