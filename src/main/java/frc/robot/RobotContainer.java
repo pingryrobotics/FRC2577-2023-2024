@@ -20,7 +20,7 @@ import edu.wpi.first.math.MathUtil;
 //import edu.wpi.first.math.trajectory.TrajectoryConfig;
 //import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.PS5Controller.Button;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 //import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.MechanismConstants;
 //import frc.robot.Constants.DriveConstants;
@@ -86,7 +87,7 @@ public class RobotContainer {
 
 
     // The driver's controller
-    CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
     // Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     // Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -216,7 +217,7 @@ public class RobotContainer {
         //     m_driverController.x().onFalse(
         //         new DriveX(m_robotDrive, false));
           
-        m_operatorController.a().onTrue(SequentialCommands.fullyRetract(m_robotDrive, m_claw, m_shoulder, m_arm));
+        m_operatorController.x().onTrue(SequentialCommands.fullyRetract(m_robotDrive, m_claw, m_shoulder, m_arm));
         m_operatorController.y().onTrue(SequentialCommands.fullyExtend(m_robotDrive, m_claw, m_shoulder, m_arm));
         m_operatorController.x().onTrue(new ArmPID(m_arm, 0));
         m_operatorController.b().onTrue(new ArmPID(m_arm, Constants.MechanismConstants.kArmFullExtension));
@@ -245,9 +246,9 @@ public class RobotContainer {
     public void containerPeriodic() {
 
 
-        if (m_driverController.getHID().getXButtonPressed()) {
+        if (m_driverController.getHID().getSquareButtonPressed()) {
             m_robotDrive.setX();
-        } else if (!m_driverController.getHID().getXButton()) {
+        } else if (!m_driverController.getHID().getSquareButton()) {
             // m_robotDrive.drive(
             //             -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
             //             -MathUtil.applyDeadband(m_driverController.getLeftX() * 0.65 * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
@@ -260,7 +261,7 @@ public class RobotContainer {
 			SmartDashboard.putBoolean("Has closed", true);
 		}
 
-        if (m_driverController.getHID().getStartButtonPressed()) {
+        if (m_driverController.getHID().getShareButtonPressed()) {
             resetGyro();
         }
 
@@ -331,15 +332,15 @@ public class RobotContainer {
             m_shoulder.resetEncoder();
         }
 
-        if (m_driverController.getHID().getLeftBumper()) {
+        if (m_driverController.getHID().getL2Button()) {
             m_robotDrive.slowModeOn();
-        } else if (m_driverController.getHID().getLeftBumperReleased()) {
+        } else if (m_driverController.getHID().getL2ButtonReleased()) {
             m_robotDrive.slowModeOff();
         }
 
-       if (m_driverController.getHID().getRightBumper()) {
+       if (m_driverController.getHID().getR2Button()) {
             m_robotDrive.ultraSlowModeOn();
-        } else if (m_driverController.getHID().getRightBumperReleased()) {
+        } else if (m_driverController.getHID().getR2ButtonReleased()) {
             m_robotDrive.ultraSlowModeOff();
         } 
 
