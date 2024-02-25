@@ -25,53 +25,54 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class MechanismConstants { // remove the "FINE TUNE VALUE" comments as you tweak them
-    public static final double kArmSpeed = 1; // FINE TUNE VALUE
-    public static final double kShoulderSpeed = 0.3; // FINE TUNE VALUE
-    public static final double kClawSpeed = 1; // FINE TUNE VALUE
+    public static final double kIntakeInSpeed = 1; // FINE TUNE VALUE
+    public static final double kIntakeOutSpeed = -1;
+    public static final double kIntakeFlipUpSpeed = 0.1; // FINE TUNE VALUE
+    public static final double kIntakeFlipDownSpeed = 0.1; // FINE TUNE VALUE
+    public static final double kShooterSpeed = 1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterSpeed = 1;
+    public static final double kRampSpeed = 1; // FINE TUNE values
+    public static final double kIndexerSpeed = 1; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;
 
-    public static final double kArmPositionTolerance = 10; // FINE TUNE VALUE
-    public static final double kClawPositionTolerance = 10; // FINE TUNE VALUE
-    public static final double kShoulderPositionTolerance = 10; // FINE TUNE VALUE
+    public static final double kIntakePositionTolerance = 10; // FINE TUNE VALUE
 
-    // public static final double kMaxArmExtension = -100; // FINE TUNE VALUE
-    // public static final double kMaxArmRetraction = 0.1; // FINE TUNE VALUE
-    // public static final double kMaxShoulderRotation = 400; // FINE TUNE VALUE
-    // public static final double kMinShoulderRotation = -100; // FINE TUNE VALUE
-    // public static final double kClawClosedPosition = 0; // FINE TUNE VALUE
+    public static final double kIntakeDownPosition = -1; // FINE TUNE VALUE
+    public static final double kIntakeUpPosition = -1;
 
-    public static final double kshoulderLowPosition = -11; // FINE TUNE VALUE
-    public static final double kshoulderMidPosition = -53; // FINE TUNE VALUE
-    public static final double kshoulderHighPosition = -68; // FINE TUNE VALUE
-    public static final double kshoulderBackPosition = 50; // FINE TUNE VALUE
-
-
-    public static final double kArmLowExtension = 0; // FINE TUNE VALUE
-    public static final double kArmMidExtension = -20; // FINE TUNE VALUE
-    public static final double kArmFullExtension = -75; // FINE TUNE VALUE
+    public static final double kShooterAdjusterLowPosition = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMidPosition = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterHighPosition = -1; // FINE TUNE VALUE
     
-    // PID values for shoulder
-    public static final double kShoulderP = 1; // FINE TUNE VALUE
-    public static final double kShoulderI = 0.0; // FINE TUNE VALUE
-    public static final double kShoulderD = 2; // FINE TUNE VALUE
-    public static final double kShoulderFF = 0.0; // FINE TUNE VALUE
-    public static final int kShoulderIZone = 0; // FINE TUNE VALUE
-    public static final double kShoulderMinOutput = -0.8; // FINE TUNE VALUE
-    public static final double kShoulderMaxOutput = 1; // FINE TUNE VALUE
+    // PID values for intake flipper
+    public static final double kIntakeP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
+    public static final double kIntakeI = 0.0; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
+                                              // less smooth but faster
+    public static final double kIntakeD = 2; // FINE TUNE VALUE; should be around 10x P
+    public static final double kIntakeFF = 0.0; // FINE TUNE VALUE
+    public static final int kIntakeIZone = 0; // FINE TUNE VALUE
+    public static final double kIntakeMinOutput = -1; // FINE TUNE VALUE
+    public static final double kIntakeMaxOutput = 1; // FINE TUNE VALUE
 
-    // PID values for arm
-    public static final double kArmP = 0.1; // FINE TUNE VALUE
-    public static final double kArmI = 0.0; // FINE TUNE VALUE
-    public static final double kArmD = 2; // FINE TUNE VALUE
-    public static final double kArmFF = 0.0; // FINE TUNE VALUE
-    public static final int kArmIZone = 0; // FINE TUNE VALUE
-    public static final double kArmMinOutput = -1.0; // FINE TUNE VALUE
-    public static final double kArmMaxOutput = 1.0; // FINE TUNE VALUE
 
-    public static final int kArmID = 31;
-    public static final int kShoulderID = 30;
-    public static final int kColorSensorID = 0;
-    public static final int kClawID = 32;
+    // PID values for intake flipper
+    public static final double kShooterAdjusterP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
+    public static final double kShooterAdjusterI = 0.0; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
+                                              // less smooth but faster
+    public static final double kShooterAdjusterD = 2; // FINE TUNE VALUE; should be around 10x P
+    public static final double kShooterAdjusterFF = 0.0; // FINE TUNE VALUE
+    public static final int kShooterAdjusterIZone = 0; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMinOutput = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMaxOutput = 1; // FINE TUNE VALUE
+
+    public static final int kRampID = 31;
+    public static final int kShooterLeftID = 30; // check
+    public static final int kShooterRightID = 31; // check
+    public static final int kShooterAdjusterLeftID = -1;
+    public static final int kShooterAdjusterRightID = -1;
+    public static final int kIndexerID = -1;
+    public static final int kIntakeID = -1;
+    public static final int kIntakeFlipID = -1;
   }
 
   public static final class DriveConstants {

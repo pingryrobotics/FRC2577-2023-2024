@@ -56,7 +56,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.Rev2mDistanceSensor;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 import com.revrobotics.Rev2mDistanceSensor.Unit;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -75,16 +74,7 @@ public class RobotContainer {
     // The robot's subsystems
     // private final Drive m_robotDrive = new Drive();
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final Arm m_arm = new Arm(new CANSparkMax(MechanismConstants.kArmID, MotorType.kBrushless));
-    // private final Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    private final DoubleSolenoid m_DoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-    private final Claw m_claw = new Claw(new CANSparkMax(MechanismConstants.kClawID, MotorType.kBrushless), m_DoubleSolenoid);
-    // private final Claw m_claw = new Claw(m_DoubleSolenoid, new ColorSensorV3(I2C.Port.kOnboard));
-    // new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kOnboard));
-    // , Unit.kInches, RangeProfile.kHighAccuracy));
-    private final Shoulder m_shoulder = new Shoulder(new CANSparkMax(MechanismConstants.kShoulderID, MotorType.kBrushless));
-
-
+    private final Intake m_intake = new Intake(Constants.MechanismConstants.kIntakeID);
 
     // The driver's controller
     CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
@@ -158,24 +148,7 @@ public class RobotContainer {
         
         // // Add commands to Autonomous Sendable Chooser
         m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto());
-        m_chooser.addOption("New Place Auto", new PlaceParkAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, false, false, false));
-        m_chooser.addOption("New Place Park Auto", new PlaceParkAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, false, true, false));
-        m_chooser.addOption("New Place Balance Auto", new PlaceParkAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, true, false, false));
-        m_chooser.addOption("New New Place Balance Auto", new PlaceParkAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, false, false, true));
-        m_chooser.addOption("New New Balance Auto", new PlaceParkAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, false, false, false, true));
 
-
-
-        m_chooser.addOption("One Piece Park Auto", new OnePieceParkAuto(m_robotDrive, m_arm, m_claw, m_shoulder, side_chooser, true, true));
-        m_chooser.addOption("One Piece Auto", new OnePieceParkAuto(m_robotDrive, m_arm, m_claw, m_shoulder, side_chooser, true, false));
-        m_chooser.addOption("Park Auto", new OnePieceParkAuto(m_robotDrive, m_arm, m_claw, m_shoulder, side_chooser, false, true));
-        m_chooser.addOption("Move Forward Auto", new MoveForwardAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, false, true));
-        m_chooser.addOption("Place and Move Forward Auto", new MoveForwardAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, true));
-        m_chooser.addOption("Place Auto", new MoveForwardAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true, false));
-        m_chooser.addOption("Auto Balance Auto", new AutoBalanceAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, false));
-        m_chooser.addOption("Place and Auto Balance Auto", new AutoBalanceAuto(m_robotDrive, m_claw, m_shoulder, m_arm, side_chooser, true));
-
-        
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
     }
