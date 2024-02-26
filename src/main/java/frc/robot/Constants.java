@@ -66,14 +66,14 @@ public final class Constants {
     public static final double kShooterAdjusterMinOutput = -1; // FINE TUNE VALUE
     public static final double kShooterAdjusterMaxOutput = 1; // FINE TUNE VALUE
 
-    public static final int kRampID = 31;
-    public static final int kShooterLeftID = 30; // check
-    public static final int kShooterRightID = 31; // check
-    public static final int kShooterAdjusterLeftID = -1;
-    public static final int kShooterAdjusterRightID = -1;
-    public static final int kIndexerID = -1;
-    public static final int kIntakeID = -1;
-    public static final int kIntakeFlipID = -1;
+    public static final int kRampID = 51;
+    public static final int kShooterLeftID = 31; // check
+    public static final int kShooterRightID = 30; // check
+    public static final int kShooterAdjusterLeftID = 61;
+    public static final int kShooterAdjusterRightID = 60;
+    public static final int kIndexerID = 50;
+    public static final int kIntakeID = 41;
+    public static final int kIntakeFlipID = 40;
   }
 
   public static final class DriveConstants {
