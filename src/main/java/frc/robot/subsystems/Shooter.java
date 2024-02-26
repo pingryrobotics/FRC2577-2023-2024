@@ -39,9 +39,10 @@ public class Shooter extends SubsystemBase {
 		this.shooterRight = shooterRight;
 		this.shooterAdjusterLeft = shooterAdjusterLeft;
 		this.shooterAdjusterRight = shooterAdjusterRight;
-		this.shooterLeft.setInverted(true);
-		this.shooterRight.setInverted(false);
+		this.shooterLeft.setInverted(false);
+		this.shooterRight.setInverted(true);
 		this.shooterAdjusterLeft.setInverted(true);
+		this.shooterAdjusterRight.setInverted(true);
 
 		this.shooterLeft.setIdleMode(IdleMode.kCoast);
 		this.shooterRight.setIdleMode(IdleMode.kCoast);
@@ -103,10 +104,6 @@ public class Shooter extends SubsystemBase {
 	public void setAdjusterSpeed(double speed) {
 		positionMode = false;
 		this.adjusterSpeed = speed;
-	}
-
-	public void adjusterOff() {
-		setAdjusterSpeed(0);
 	}
 
 	public void resetEncoder() {

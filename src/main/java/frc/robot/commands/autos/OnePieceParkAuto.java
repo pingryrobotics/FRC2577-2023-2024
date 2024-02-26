@@ -70,12 +70,12 @@ public class OnePieceParkAuto extends SequentialCommandGroup {
         SwerveControllerCommand toPark = TrajectoryCommandGenerator.generateCommand(traj, m_robotDrive);
 
         if (place) {
-            addCommands();
+            addCommands(
+
+            );
         }
         if (park) {
             addCommands(
-                new InstantCommand(() -> m_robotDrive.resetOdometry(traj.getInitialPose())).withTimeout(1),
-                // new RunCommand(() -> m_robotDrive.toggleSlowMode()),
                 toPark,
                 new InstantCommand(() -> m_robotDrive.setX()).withTimeout(1)
             );

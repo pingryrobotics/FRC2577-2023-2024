@@ -34,6 +34,8 @@ public class Intake extends SubsystemBase {
 		this.intakeMotor = intakeMotor;
 		this.intakeFlipMotor = intakeFlipMotor;
 
+		intakeMotor.setInverted(false);
+
 		intakeMotor.setIdleMode(IdleMode.kCoast);
 		intakeFlipMotor.setIdleMode(IdleMode.kBrake);
 
@@ -71,12 +73,9 @@ public class Intake extends SubsystemBase {
 		desiredPos = pos;
 	}
 
-	public void intakeFlip(double speed) {
+	public void setFlipSpeed(double speed) {
+		positionMode = false;
 		flipSpeed = speed;
-	}
-
-	public void intakeFlipStop() {
-		flipSpeed = 0;
 	}
 
 	public void resetEncoder() {

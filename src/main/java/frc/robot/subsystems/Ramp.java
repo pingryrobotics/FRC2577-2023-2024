@@ -25,7 +25,7 @@ public class Ramp extends SubsystemBase {
 	 */
 	public Ramp(CANSparkMax rampMotor) {
 		this.rampMotor = rampMotor;
-		rampMotor.setIdleMode(IdleMode.kBrake);
+		rampMotor.setInverted(false);
 	}
 
 	@Override

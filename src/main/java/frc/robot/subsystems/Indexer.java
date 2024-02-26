@@ -25,8 +25,6 @@ public class Indexer extends SubsystemBase {
 	 */
 	public Indexer(CANSparkMax indexerMotor) {
 		this.indexerMotor = indexerMotor;
-		
-		this.indexerMotor.setIdleMode(IdleMode.kBrake);
 	}
 
 	@Override

@@ -87,12 +87,9 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        UsbCamera camera = CameraServer.startAutomaticCapture();
-        camera.setFPS(30);
-        camera.setResolution(256, 144);
-        // CameraServer.
-        
-        // CameraServer.
+        // UsbCamera camera = CameraServer.startAutomaticCapture();
+        // camera.setFPS(30);
+        // camera.setResolution(256, 144);
 
         side_chooser.setDefaultOption("Red Left", 0);
         side_chooser.addOption("Red Center", 1);
@@ -143,10 +140,10 @@ public class RobotContainer {
         m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake down PID
         m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake up PID
 
-        m_operatorController.circle().onTrue(IntakeCommands.IntakeIn(m_intake, m_ramp)); // intake & ramp wheels in
-        m_operatorController.circle().onFalse(IntakeCommands.IntakeStop(m_intake, m_ramp)); // intake & ramp wheels stop
-        m_operatorController.square().onTrue(IntakeCommands.IntakeOut(m_intake, m_ramp)); // intake & ramp wheels out
+        m_operatorController.square().onTrue(IntakeCommands.IntakeIn(m_intake, m_ramp)); // intake & ramp wheels in
         m_operatorController.square().onFalse(IntakeCommands.IntakeStop(m_intake, m_ramp)); // intake & ramp wheels stop
+        m_operatorController.circle().onTrue(IntakeCommands.IntakeOut(m_intake, m_ramp)); // intake & ramp wheels out
+        m_operatorController.circle().onFalse(IntakeCommands.IntakeStop(m_intake, m_ramp)); // intake & ramp wheels stop
 
         // SHOOTER ADJUSTMENT COMMANDS
 
@@ -187,15 +184,15 @@ public class RobotContainer {
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
         if (m_operatorController.getLeftY() > 0.1) {
             double flipSpeed = m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
-            m_intake.intakeFlip(flipSpeed);
+            m_intake.setFlipSpeed(flipSpeed);
             buttonStates.put("operatorLeftJoystick", true);
         } else if (m_operatorController.getLeftY() < -0.1) {
             double flipSpeed = m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipDownSpeed;
-            m_intake.intakeFlip(flipSpeed);
+            m_intake.setFlipSpeed(flipSpeed);
             buttonStates.put("operatorLeftJoystick", true);
         } else {
-            if (buttonStates.get("operatorLeftJoystick")) {
-                m_intake.intakeFlipStop();
+            if (buttonStates.containsKey("operatorLeftJoystick")) {
+                m_intake.setFlipSpeed(0);
                 buttonStates.put("operatorLeftJoystick", false);
             }
         }
@@ -205,8 +202,8 @@ public class RobotContainer {
             m_shooter.setAdjusterSpeed(adjusterSpeed);
             buttonStates.put("operatorRightJoystick", true);
         } else {
-            if (buttonStates.get("operatorRightJoystick")) {
-                m_shooter.adjusterOff();
+            if (buttonStates.containsKey("operatorRightJoystick")) {
+                m_shooter.setAdjusterSpeed(0);
                 buttonStates.put("operatorRightJoystick", false);
             }
         }

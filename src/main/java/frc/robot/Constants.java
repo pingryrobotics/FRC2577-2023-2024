@@ -25,18 +25,16 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class MechanismConstants { // remove the "FINE TUNE VALUE" comments as you tweak them
-    public static final double kIntakeInSpeed = 0.5; // FINE TUNE VALUE
-    public static final double kIntakeOutSpeed = 0.5;
-    public static final double kIntakeFlipUpSpeed = 0.1; // FINE TUNE VALUE
-    public static final double kIntakeFlipDownSpeed = 0.1; // FINE TUNE VALUE
+    public static final double kIntakeInSpeed = 0.3; // FINE TUNE VALUE
+    public static final double kIntakeOutSpeed = 0.3;
+    public static final double kIntakeFlipUpSpeed = 1; // FINE TUNE VALUE
+    public static final double kIntakeFlipDownSpeed = 0.3; // FINE TUNE VALUE
     public static final double kShooterSpeed = 1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterSpeed = 1;
+    public static final double kShooterAdjusterSpeed = 0.1;
     public static final double kRampInSpeed = 0.3; // FINE TUNE values
     public static final double kRampOutSpeed = 0.3; // FINE TUNE values
-    public static final double kIndexerSpeed = 1; // FINE TUNE
+    public static final double kIndexerSpeed = 0.5; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;
-
-    public static final double kIntakePositionTolerance = 10; // FINE TUNE VALUE
 
     public static final double kIntakeDown = -1; // FINE TUNE VALUE
     public static final double kIntakeUp = -1;
@@ -72,8 +70,8 @@ public final class Constants {
     public static final int kShooterAdjusterLeftID = 61;
     public static final int kShooterAdjusterRightID = 60;
     public static final int kIndexerID = 50;
-    public static final int kIntakeID = 41;
-    public static final int kIntakeFlipID = 40;
+    public static final int kIntakeID = 40;
+    public static final int kIntakeFlipID = 41;
   }
 
   public static final class DriveConstants {

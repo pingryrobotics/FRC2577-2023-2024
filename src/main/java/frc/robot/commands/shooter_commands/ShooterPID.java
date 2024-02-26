@@ -37,7 +37,7 @@ public class ShooterPID extends Command {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setPosition(m_shooter.getPosition());
-        m_shooter.adjusterOff();
+        m_shooter.setAdjusterSpeed(0);
     }
 
     // Returns true when the command should end.
