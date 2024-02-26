@@ -1,35 +1,35 @@
-package frc.robot.commands.arm_commands; //CTV
+package frc.robot.commands.intake_commands; //CTV
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Arm; //CTV
+import frc.robot.subsystems.Intake; //CTV
 
 /** An example command that uses an example subsystem. */
-public class ArmRetract extends Command {
+public class IntakeWheels extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final Arm m_arm;
+    private final Intake m_intake;
+    private final double speed;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param subsystem The subsystem used by this command.
      */
-    public ArmRetract(Arm arm) {
-        m_arm = arm;
+    public IntakeWheels(Intake intake, double speed) {
+        m_intake = intake;
+        this.speed = speed;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(arm);
+        addRequirements(m_intake);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_arm.moveArmDirection(-1);
+        m_intake.setSpeed(speed);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-    public void execute() {
-        System.out.println("Arm position: " + m_arm.getArmPosition());
-    }
+    public void execute() {}
 
     // Called once the command ends or is interrupted.
     @Override
@@ -38,6 +38,6 @@ public class ArmRetract extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return true; // instantly finishes (change this if you want to manually time it out)
     }
 }

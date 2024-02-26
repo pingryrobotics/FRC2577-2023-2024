@@ -34,15 +34,7 @@ public class Indexer extends SubsystemBase {
 		// This method will be called once per scheduler run
 	}
 
-	public void indexerOn() {
-		indexerMotor.set(MechanismConstants.kIndexerSpeed);
-	}
-
-	public void indexerOff() {
-		indexerMotor.set(0);
-	}
-
-	public void indexerReverse() {
-		indexerMotor.set(-MechanismConstants.kIndexerSpeed);
+	public void setSpeed(double speed) {
+		indexerMotor.set(speed);
 	}
 }

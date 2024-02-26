@@ -33,15 +33,7 @@ public class Ramp extends SubsystemBase {
 		// This method will be called once per scheduler run
 	}
 
-	public void rampOn() {
-		rampMotor.set(MechanismConstants.kRampSpeed);
-	}
-
-	public void rampOff() {
-		rampMotor.set(0);
-	}
-
-	public void rampReverse() {
-		rampMotor.set(-MechanismConstants.kRampSpeed);
+	public void setSpeed(double speed) {
+		rampMotor.set(speed);
 	}
 }

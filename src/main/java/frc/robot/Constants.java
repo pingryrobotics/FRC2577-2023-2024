@@ -25,24 +25,25 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class MechanismConstants { // remove the "FINE TUNE VALUE" comments as you tweak them
-    public static final double kIntakeInSpeed = 1; // FINE TUNE VALUE
-    public static final double kIntakeOutSpeed = -1;
+    public static final double kIntakeInSpeed = 0.5; // FINE TUNE VALUE
+    public static final double kIntakeOutSpeed = 0.5;
     public static final double kIntakeFlipUpSpeed = 0.1; // FINE TUNE VALUE
     public static final double kIntakeFlipDownSpeed = 0.1; // FINE TUNE VALUE
     public static final double kShooterSpeed = 1; // FINE TUNE VALUE
     public static final double kShooterAdjusterSpeed = 1;
-    public static final double kRampSpeed = 1; // FINE TUNE values
+    public static final double kRampInSpeed = 0.3; // FINE TUNE values
+    public static final double kRampOutSpeed = 0.3; // FINE TUNE values
     public static final double kIndexerSpeed = 1; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;
 
     public static final double kIntakePositionTolerance = 10; // FINE TUNE VALUE
 
-    public static final double kIntakeDownPosition = -1; // FINE TUNE VALUE
-    public static final double kIntakeUpPosition = -1;
+    public static final double kIntakeDown = -1; // FINE TUNE VALUE
+    public static final double kIntakeUp = -1;
 
-    public static final double kShooterAdjusterLowPosition = -1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterMidPosition = -1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterHighPosition = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterLow = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMid = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterHigh = -1; // FINE TUNE VALUE
     
     // PID values for intake flipper
     public static final double kIntakeP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating

@@ -91,12 +91,12 @@ public class Shooter extends SubsystemBase {
 		}
 	}
 
-	public void setShooterPosition(double position) {
+	public void setPosition(double position) {
 		positionMode = true;
 		desiredPos = position;
 	}
 
-	public void setShooterSpeed(double speed) {
+	public void setSpeed(double speed) {
 		this.shooterSpeed = speed;
 	}
 
@@ -105,19 +105,16 @@ public class Shooter extends SubsystemBase {
 		this.adjusterSpeed = speed;
 	}
 
-	public void shooterOff() {
-		setShooterSpeed(0);
-	}
-
 	public void adjusterOff() {
 		setAdjusterSpeed(0);
 	}
 
-	public void shooterOn() {
-		setShooterSpeed(MechanismConstants.kShooterSpeed);
+	public void resetEncoder() {
+		shooterAdjusterLeft.getEncoder().setPosition(0);
+		shooterAdjusterRight.getEncoder().setPosition(0);
 	}
 
-	public void adjusterOn() {
-		setAdjusterSpeed(MechanismConstants.kShooterAdjusterSpeed);
+	public double getPosition() {
+		return (shooterAdjusterLeft.getEncoder().getPosition() + shooterAdjusterRight.getEncoder().getPosition()) / 2;
 	}
 }

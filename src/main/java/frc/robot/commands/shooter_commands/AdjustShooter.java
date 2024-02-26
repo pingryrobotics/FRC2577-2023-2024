@@ -1,36 +1,35 @@
-package frc.robot.commands.shoulder_commands; //CTV
+package frc.robot.commands.shooter_commands; //CTV
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shoulder;
+import frc.robot.subsystems.Shooter; //CTV
 
 /** An example command that uses an example subsystem. */
-public class ShoulderToHigh extends Command {
+public class AdjustShooter extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final Shoulder m_shoulder;
+    private final Shooter m_shooter;
+    private final double m_speed;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param subsystem The subsystem used by this command.
      */
-    public ShoulderToHigh(Shoulder shoulder) {
-        m_shoulder = shoulder;
+    public AdjustShooter(Shooter shooter, double speed) {
+        m_shooter = shooter;
+        m_speed = speed;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shoulder);
+        addRequirements(shooter);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_shoulder.setDesiredTicks(Constants.MechanismConstants.kshoulderHighPosition);
+        m_shooter.setAdjusterSpeed(m_speed);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-    public void execute() {
-        System.out.println("Shoulder position: " + m_shoulder.getShoulderPosition());
-    }
+    public void execute() {}
 
     // Called once the command ends or is interrupted.
     @Override

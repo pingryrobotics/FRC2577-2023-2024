@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.resetEncodersAndGyro();
+    m_robotContainer.resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // m_robotContainer.enableAutomaticDistance();
 

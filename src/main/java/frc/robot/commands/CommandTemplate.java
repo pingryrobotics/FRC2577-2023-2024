@@ -34,6 +34,6 @@ public class CommandTemplate extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return true; // instantly finishes (change this if you want to manually time it out)
     }
 }

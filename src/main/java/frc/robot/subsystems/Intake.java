@@ -62,40 +62,24 @@ public class Intake extends SubsystemBase {
 		}
 	}
 
-	public void intakeIn() {
-		intakeMotor.set(MechanismConstants.kIntakeInSpeed);
+	public void setSpeed(double speed) {
+		intakeMotor.set(speed);
 	}
 
-	public void intakeOut() {
-		intakeMotor.set(MechanismConstants.kIntakeOutSpeed);
-	}
-
-	public void intakeStop() {
-		intakeMotor.set(0);
-	}
-	
 	public void setPosition(double pos) {
 		positionMode = true;
 		desiredPos = pos;
 	}
 
-	public void intakeFlipUpPos() { // move intake to up position
-		setPosition(MechanismConstants.kIntakeUpPosition);
-	}
-
-	public void intakeFlipDownPos() { // move intake to down position
-		setPosition(MechanismConstants.kIntakeDownPosition);
-	}
-
-	public void intakeFlipUpwards() { // start moving intake upwards (speed-based)
-		flipSpeed = MechanismConstants.kIntakeFlipUpSpeed;
-	}
-	
-	public void intakeFlipDownwards() { // start moving intake downwards (speed-based)
-		flipSpeed = MechanismConstants.kIntakeFlipDownSpeed;
+	public void intakeFlip(double speed) {
+		flipSpeed = speed;
 	}
 
 	public void intakeFlipStop() {
 		flipSpeed = 0;
+	}
+
+	public void resetEncoder() {
+		intakeFlipMotor.getEncoder().setPosition(0);
 	}
 }
