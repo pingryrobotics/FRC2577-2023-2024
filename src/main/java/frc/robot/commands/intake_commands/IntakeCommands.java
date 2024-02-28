@@ -10,19 +10,19 @@ import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCommands {
-    public static ParallelCommandGroup IntakeIn(Intake m_intake, Ramp m_ramp) {
+    public static ParallelCommandGroup IntakeRampIn(Intake m_intake, Ramp m_ramp) {
         return new ParallelCommandGroup(
                 new IntakeWheels(m_intake, MechanismConstants.kIntakeInSpeed),
                 new RampWheels(m_ramp, MechanismConstants.kRampInSpeed));
     }
 
-    public static ParallelCommandGroup IntakeOut(Intake m_intake, Ramp m_ramp) {
+    public static ParallelCommandGroup IntakeRampOut(Intake m_intake, Ramp m_ramp) {
         return new ParallelCommandGroup(
                 new IntakeWheels(m_intake, -MechanismConstants.kIntakeOutSpeed),
                 new RampWheels(m_ramp, -MechanismConstants.kRampOutSpeed));
     }
 
-    public static ParallelCommandGroup IntakeStop(Intake m_intake, Ramp m_ramp) {
+    public static ParallelCommandGroup IntakeRampStop(Intake m_intake, Ramp m_ramp) {
         return new ParallelCommandGroup(
                 new IntakeWheels(m_intake, 0),
                 new RampWheels(m_ramp, 0));
@@ -36,7 +36,7 @@ public class IntakeCommands {
         return new IntakeWheels(m_intake, -MechanismConstants.kIntakeOutSpeed);
     }
 
-    public static Command IntakeStop(Intake m_intake) {
+    public static Command StopIntake(Intake m_intake) {
         return new IntakeWheels(m_intake, 0);
     }
 
@@ -48,7 +48,7 @@ public class IntakeCommands {
         return new RampWheels(m_ramp, -MechanismConstants.kRampOutSpeed);
     }
 
-    public static Command RampStop(Ramp m_ramp) {
+    public static Command StopRamp(Ramp m_ramp) {
         return new RampWheels(m_ramp, 0);
     }
 

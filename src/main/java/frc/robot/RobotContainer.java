@@ -30,7 +30,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.autos.DoNothingAuto;
-
+import frc.robot.commands.autos.SideAuto;
 import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
 import frc.robot.subsystems.Indexer;
@@ -105,15 +105,33 @@ public class RobotContainer {
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(
                     () -> m_robotDrive.drive(
-                        -MathUtil.applyDeadband(m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
-                        -MathUtil.applyDeadband(m_driverController.getLeftX() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
-                        -MathUtil.applyDeadband(m_driverController.getRightX() * (m_robotDrive.m_slowMode ? 0.4 : 1) * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1), OIConstants.kDriveDeadband),
+                                -MathUtil
+                                        .applyDeadband(
+                                                m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1)
+                                                        * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
+                                                OIConstants.kDriveDeadband),
+                        
+                                -MathUtil
+                                        .applyDeadband(
+                                                m_driverController.getLeftX() * (m_robotDrive.m_slowMode ? 0.4 : 1)
+                                                        * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
+                                                OIConstants.kDriveDeadband),
+                        
+                                -MathUtil
+                                        .applyDeadband(
+                                                m_driverController.getRightX() * (m_robotDrive.m_slowMode ? 0.4 : 1)
+                                                        * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
+                                                OIConstants.kDriveDeadband),
+                        
                         true, false),
                         m_robotDrive));
             
         
         // // Add commands to Autonomous Sendable Chooser
         m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto());
+        m_chooser.addOption("Side 3 Note Auto",
+                new SideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
+        
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
@@ -140,10 +158,10 @@ public class RobotContainer {
         m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake down PID
         m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake up PID
 
-        m_operatorController.square().onTrue(IntakeCommands.IntakeIn(m_intake, m_ramp)); // intake & ramp wheels in
-        m_operatorController.square().onFalse(IntakeCommands.IntakeStop(m_intake, m_ramp)); // intake & ramp wheels stop
-        m_operatorController.circle().onTrue(IntakeCommands.IntakeOut(m_intake, m_ramp)); // intake & ramp wheels out
-        m_operatorController.circle().onFalse(IntakeCommands.IntakeStop(m_intake, m_ramp)); // intake & ramp wheels stop
+        m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
+        m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
+        m_operatorController.circle().onTrue(IntakeCommands.IntakeRampOut(m_intake, m_ramp)); // intake & ramp wheels out
+        m_operatorController.circle().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
 
         // SHOOTER ADJUSTMENT COMMANDS
 
@@ -156,10 +174,10 @@ public class RobotContainer {
 
         // SHOOTER COMMANDS
 
-        m_operatorController.L2().onTrue(ShooterCommands.Shoot(m_shooter)); // shooter on
-        m_operatorController.L2().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
-        m_operatorController.R2().onTrue(ShooterCommands.Index(m_indexer)); // indexer out
-        m_operatorController.R2().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
+        // m_operatorController.L2().onTrue(ShooterCommands.Shoot(m_shooter)); // shooter on
+        // m_operatorController.L2().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
+        // m_operatorController.R2().onTrue(ShooterCommands.Index(m_indexer)); // indexer out
+        // m_operatorController.R2().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
 
         m_operatorController.L1().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer)); // shooter on, wait, and indexer out
     }
@@ -206,6 +224,20 @@ public class RobotContainer {
                 m_shooter.setAdjusterSpeed(0);
                 buttonStates.put("operatorRightJoystick", false);
             }
+        }
+
+        // OPERATOR CONTROLLER COMMANDS
+
+        if (m_operatorController.getHID().getL2Button()) {
+            m_shooter.setSpeed(MechanismConstants.kShooterSpeed * m_operatorController.getHID().getL2Axis());
+        } else if (m_operatorController.getHID().getL2ButtonReleased()) {
+            m_shooter.setSpeed(0);
+        }
+
+        if (m_operatorController.getHID().getR2Button()) {
+            m_indexer.setSpeed(MechanismConstants.kIndexerSpeed * m_operatorController.getHID().getR2Axis());
+        } else if (m_operatorController.getHID().getR2ButtonReleased()) {
+            m_indexer.setSpeed(0);
         }
 
     }
