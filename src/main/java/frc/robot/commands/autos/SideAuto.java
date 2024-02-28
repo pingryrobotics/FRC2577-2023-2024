@@ -71,8 +71,8 @@ public class SideAuto extends SequentialCommandGroup {
 
         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-2*Math.PI/3)));
 
-        String path1 = "2.1.path";
-        String path2 = "2.2.path";
+        String path1 = "2.1";
+        String path2 = "2.2";
 
         Command path1Cmd = m_robotDrive.followPathCommand(path1);
         Command path2Cmd = m_robotDrive.followPathCommand(path2);
