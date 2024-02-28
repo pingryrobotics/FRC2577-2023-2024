@@ -25,6 +25,7 @@ public class Indexer extends SubsystemBase {
 	 */
 	public Indexer(CANSparkMax indexerMotor) {
 		this.indexerMotor = indexerMotor;
+		this.indexerMotor.setInverted(true);
 	}
 
 	@Override
