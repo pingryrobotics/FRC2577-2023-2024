@@ -210,7 +210,7 @@ public class RobotContainer {
         
         // OPERATOR JOYSTICK COMMANDS
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
-        if (-m_operatorController.getLeftY() > 0.1) { // moving joystick down is positive
+        if (-m_operatorController.getLeftY() > 0.2) { // moving joystick down is positive
             double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
             m_intake.setFlipSpeed(flipSpeed);
             buttonStates.put("operatorLeftJoystick", true);
