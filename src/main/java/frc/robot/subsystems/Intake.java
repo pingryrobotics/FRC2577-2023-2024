@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechanismConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
@@ -34,7 +35,11 @@ public class Intake extends SubsystemBase {
 		this.intakeMotor = intakeMotor;
 		this.intakeFlipMotor = intakeFlipMotor;
 
+		intakeFlipMotor.restoreFactoryDefaults();
+		intakeMotor.restoreFactoryDefaults();
+
 		intakeMotor.setInverted(false);
+		intakeFlipMotor.setInverted(true);
 
 		intakeMotor.setIdleMode(IdleMode.kCoast);
 		intakeFlipMotor.setIdleMode(IdleMode.kBrake);
@@ -47,6 +52,15 @@ public class Intake extends SubsystemBase {
 		m_pid.setIZone(MechanismConstants.kIntakeIZone);
 		m_pid.setFF(MechanismConstants.kIntakeFF);
 		m_pid.setOutputRange(MechanismConstants.kIntakeMinOutput, MechanismConstants.kIntakeMaxOutput);
+
+		// m_pid.setP(1000);
+		// m_pid.setI(10);
+		// m_pid.setD(1000);
+		// m_pid.setIZone(1000);
+		// m_pid.setFF(1000);
+		// m_pid.setOutputRange(-1000, 1000);
+
+		positionMode = false;
 	}
 
 	@Override
@@ -56,12 +70,19 @@ public class Intake extends SubsystemBase {
 		
 		SmartDashboard.putNumber("Current Intake Position (rotations)", currPos);
 		SmartDashboard.putNumber("Desired Intake Position (rotations)", desiredPos);
+		SmartDashboard.putBoolean("intake position mode", positionMode);
+
+		// intakeFlipMotor.getPIDController().setReference(1000, ControlType.kPosition);
+		SmartDashboard.putNumber("max output", m_pid.getOutputMax());
+		SmartDashboard.putNumber("min output", m_pid.getOutputMin());
 
 		if (positionMode) {
-			m_pid.setReference(desiredPos, ControlType.kPosition);
+			SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
 		} else {
 			intakeFlipMotor.set(flipSpeed);
 		}
+
+		SmartDashboard.putNumber("Intake motor speed", intakeFlipMotor.getAppliedOutput());
 	}
 
 	public void setSpeed(double speed) {
@@ -75,6 +96,7 @@ public class Intake extends SubsystemBase {
 
 	public void setFlipSpeed(double speed) {
 		positionMode = false;
+		desiredPos = intakeFlipMotor.getEncoder().getPosition();
 		flipSpeed = speed;
 	}
 

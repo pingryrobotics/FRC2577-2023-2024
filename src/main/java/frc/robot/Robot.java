@@ -95,6 +95,9 @@ public class Robot extends TimedRobot {
     }
 
 
+    m_robotContainer.resetEncoders();
+
+
     // m_robotContainer.enableLimit();
   }
 

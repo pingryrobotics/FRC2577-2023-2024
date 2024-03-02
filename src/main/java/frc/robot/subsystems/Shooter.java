@@ -67,6 +67,8 @@ public class Shooter extends SubsystemBase {
 		m_pidRight.setIZone(MechanismConstants.kShooterAdjusterIZone);
 		m_pidRight.setFF(MechanismConstants.kShooterAdjusterFF);
 		m_pidRight.setOutputRange(MechanismConstants.kShooterAdjusterMinOutput, MechanismConstants.kShooterAdjusterMaxOutput);
+
+		positionMode = false;
 	}
 	
 
@@ -79,13 +81,14 @@ public class Shooter extends SubsystemBase {
 		double adjusterPosLeft = shooterAdjusterLeft.getEncoder().getPosition();
 		double adjusterPosRight = shooterAdjusterRight.getEncoder().getPosition();
 
-		SmartDashboard.putNumber("Current Shooter Position Left (rotations)", adjusterPosLeft);
+		SmartDashboard.putNumber("Current Shooter Position Left (main) (rotations)", adjusterPosLeft);
 		SmartDashboard.putNumber("Current Shooter Position Right (rotations)", adjusterPosRight);
 		SmartDashboard.putNumber("Desired Shooter Position (rotations)", desiredPos);
+		SmartDashboard.putBoolean("shooter position mode", positionMode);
 		
 		if (positionMode) {
 			m_pidLeft.setReference(desiredPos, ControlType.kPosition);
-			m_pidRight.setReference(desiredPos, ControlType.kPosition);
+			m_pidRight.setReference(desiredPos + (adjusterPosLeft - adjusterPosRight), ControlType.kPosition);
 		} else {
 			shooterAdjusterLeft.set(adjusterSpeed);
 			shooterAdjusterRight.set(adjusterSpeed);
@@ -103,6 +106,7 @@ public class Shooter extends SubsystemBase {
 
 	public void setAdjusterSpeed(double speed) {
 		positionMode = false;
+		desiredPos = shooterAdjusterLeft.getEncoder().getPosition();
 		this.adjusterSpeed = speed;
 	}
 

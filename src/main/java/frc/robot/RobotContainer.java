@@ -31,10 +31,12 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.autos.DoNothingAuto;
 import frc.robot.commands.autos.SideAuto;
+import frc.robot.commands.climber_commands.Climb;
 import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Ramp;
@@ -68,11 +70,12 @@ public class RobotContainer {
     private final Ramp m_ramp = new Ramp(new CANSparkMax(MechanismConstants.kRampID, CANSparkMax.MotorType.kBrushless));
     private final Indexer m_indexer = new Indexer(
             new CANSparkMax(MechanismConstants.kIndexerID, CANSparkMax.MotorType.kBrushless));
+    private final Climber m_climber = new Climber(
+            new CANSparkMax(MechanismConstants.kLeftClimberID, CANSparkMax.MotorType.kBrushless),
+            new CANSparkMax(MechanismConstants.kRightClimberID, CANSparkMax.MotorType.kBrushless));
 
     // The driver's controller
     CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
-    // Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
-    // Joystick m_driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     CommandPS4Controller m_operatorController = new CommandPS4Controller(OIConstants.kOperatorControllerPort);
 
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -128,7 +131,7 @@ public class RobotContainer {
             
         
         // // Add commands to Autonomous Sendable Chooser
-        m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto());
+        m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto(m_robotDrive));
         m_chooser.addOption("Side 3 Note Auto",
                 new SideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
         
@@ -155,8 +158,8 @@ public class RobotContainer {
 
         // INTAKE/RAMP COMMANDS
           
-        m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake down PID
-        m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake up PID
+        m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
+        m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
 
         m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
         m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
@@ -180,6 +183,13 @@ public class RobotContainer {
         // m_operatorController.R2().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
 
         m_operatorController.L1().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer)); // shooter on, wait, and indexer out
+
+        m_operatorController.share().onTrue(new InstantCommand(() -> resetEncoders()));
+
+        m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+
+        m_driverController.square().onTrue(new Climb(m_climber, MechanismConstants.kClimberSpeed));
+        m_driverController.square().onFalse(new Climb(m_climber, 0));
     }
 
     public void containerPeriodic() {
@@ -200,16 +210,16 @@ public class RobotContainer {
         
         // OPERATOR JOYSTICK COMMANDS
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
-        if (m_operatorController.getLeftY() > 0.1) {
-            double flipSpeed = m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
+        if (-m_operatorController.getLeftY() > 0.1) { // moving joystick down is positive
+            double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
             m_intake.setFlipSpeed(flipSpeed);
             buttonStates.put("operatorLeftJoystick", true);
-        } else if (m_operatorController.getLeftY() < -0.1) {
-            double flipSpeed = m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipDownSpeed;
+        } else if (-m_operatorController.getLeftY() < -0.1) { // moving joystick up is negative
+            double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipDownSpeed;
             m_intake.setFlipSpeed(flipSpeed);
             buttonStates.put("operatorLeftJoystick", true);
         } else {
-            if (buttonStates.containsKey("operatorLeftJoystick")) {
+            if (buttonStates.containsKey("operatorLeftJoystick") && buttonStates.get("operatorLeftJoystick")) {
                 m_intake.setFlipSpeed(0);
                 buttonStates.put("operatorLeftJoystick", false);
             }
@@ -220,7 +230,7 @@ public class RobotContainer {
             m_shooter.setAdjusterSpeed(adjusterSpeed);
             buttonStates.put("operatorRightJoystick", true);
         } else {
-            if (buttonStates.containsKey("operatorRightJoystick")) {
+            if (buttonStates.containsKey("operatorRightJoystick") && buttonStates.get("operatorRightJoystick")) {
                 m_shooter.setAdjusterSpeed(0);
                 buttonStates.put("operatorRightJoystick", false);
             }

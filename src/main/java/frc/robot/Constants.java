@@ -27,42 +27,43 @@ public final class Constants {
   public static final class MechanismConstants { // remove the "FINE TUNE VALUE" comments as you tweak them
     public static final double kIntakeInSpeed = 0.3; // FINE TUNE VALUE
     public static final double kIntakeOutSpeed = 0.3;
-    public static final double kIntakeFlipUpSpeed = 1; // FINE TUNE VALUE
-    public static final double kIntakeFlipDownSpeed = 0.3; // FINE TUNE VALUE
+    public static final double kIntakeFlipUpSpeed = 0.1; // FINE TUNE VALUE
+    public static final double kIntakeFlipDownSpeed = 0.1; // FINE TUNE VALUE
     public static final double kShooterSpeed = 1; // FINE TUNE VALUE
     public static final double kShooterAdjusterSpeed = 0.1;
     public static final double kRampInSpeed = 0.4; // FINE TUNE values
     public static final double kRampOutSpeed = 0.3; // FINE TUNE values
     public static final double kIndexerSpeed = -0.5; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;
+    public static final double kClimberSpeed = 0.15;
 
-    public static final double kIntakeDown = -1; // FINE TUNE VALUE
-    public static final double kIntakeUp = -1;
+    public static final double kIntakeDown = -10; // FINE TUNE VALUE 21.3
+    public static final double kIntakeUp = 0;
 
-    public static final double kShooterAdjusterLow = -1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterMid = -1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterHigh = -1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterLow = 0; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMid = 6; // FINE TUNE VALUE
+    public static final double kShooterAdjusterHigh = 15; // FINE TUNE VALUE
     
     // PID values for intake flipper
     public static final double kIntakeP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
-    public static final double kIntakeI = 0.0; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
+    public static final double kIntakeI = 1e-4; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
                                               // less smooth but faster
-    public static final double kIntakeD = 2; // FINE TUNE VALUE; should be around 10x P
+    public static final double kIntakeD = 1; // FINE TUNE VALUE; should be around 10x P
     public static final double kIntakeFF = 0.0; // FINE TUNE VALUE
     public static final int kIntakeIZone = 0; // FINE TUNE VALUE
-    public static final double kIntakeMinOutput = -1; // FINE TUNE VALUE
-    public static final double kIntakeMaxOutput = 1; // FINE TUNE VALUE
+    public static final double kIntakeMinOutput = -0.05; // FINE TUNE VALUE
+    public static final double kIntakeMaxOutput = 0.08; // FINE TUNE VALUE
 
 
     // PID values for intake flipper
     public static final double kShooterAdjusterP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
-    public static final double kShooterAdjusterI = 0.0; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
+    public static final double kShooterAdjusterI = 1e-4; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
                                               // less smooth but faster
-    public static final double kShooterAdjusterD = 2; // FINE TUNE VALUE; should be around 10x P
+    public static final double kShooterAdjusterD = 1; // FINE TUNE VALUE; should be around 10x P
     public static final double kShooterAdjusterFF = 0.0; // FINE TUNE VALUE
     public static final int kShooterAdjusterIZone = 0; // FINE TUNE VALUE
-    public static final double kShooterAdjusterMinOutput = -1; // FINE TUNE VALUE
-    public static final double kShooterAdjusterMaxOutput = 1; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMinOutput = -kShooterAdjusterSpeed; // FINE TUNE VALUE
+    public static final double kShooterAdjusterMaxOutput = kShooterAdjusterSpeed; // FINE TUNE VALUE
 
     public static final int kRampID = 51;
     public static final int kShooterLeftID = 31; // check
@@ -72,6 +73,8 @@ public final class Constants {
     public static final int kIndexerID = 50;
     public static final int kIntakeID = 40;
     public static final int kIntakeFlipID = 41;
+    public static final int kLeftClimberID = 54;
+    public static final int kRightClimberID = 53; 
   }
 
   public static final class DriveConstants {
@@ -171,7 +174,6 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 1;
     public static final int kOperatorControllerPort = 0;
-    public static final int kDriverJoystickPort = 2;
     public static final double kDriveDeadband = 0.05;
   }
 
