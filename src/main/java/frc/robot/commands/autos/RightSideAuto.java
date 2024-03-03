@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.GeometryUtil;
 
 // commented because i don't like seeing yellow dots on my sidebar - christian
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,21 +57,45 @@ public class RightSideAuto extends SequentialCommandGroup {
 	*/
     public RightSideAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
             SendableChooser<Integer> side_chooser, boolean three) {
-        
+
         m_robotDrive = drive;
         m_shooter = shooter;
         m_indexer = indexer;
         m_intake = intake;
         m_ramp = ramp;
 
-		// Use addRequirements() here to declare subsystem dependencies.
+        // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_robotDrive);
         addRequirements(m_shooter);
         addRequirements(m_indexer);
         addRequirements(m_intake);
         addRequirements(m_ramp);
 
-        m_robotDrive.resetOdometry(new Pose2d(0.73, 4.43, Rotation2d.fromDegrees(-42.82)));
+        Pose2d start = new Pose2d(0.73, 4.43, Rotation2d.fromDegrees(-42.82));
+
+        boolean flip = false;
+
+        switch (side_chooser.getSelected()) {
+            case 0:
+                flip = true;
+            case 1:
+                flip = true;
+            case 2:
+                flip = true;
+            case 3:
+            case 4:
+            case 5:
+        }
+        Pose2d flippedStart;
+        if (flip) {
+            Translation2d flippedStartTranslation = GeometryUtil.flipFieldPosition(start.getTranslation());
+            Rotation2d flippedStartRotation = GeometryUtil.flipFieldRotation(start.getRotation());
+            flippedStart = new Pose2d(flippedStartTranslation, flippedStartRotation);
+
+        } else {
+            flippedStart = start;
+        }
+        m_robotDrive.resetOdometry(flippedStart);
 
         String path1 = "3.1";
         String path2 = "3.2";
@@ -87,8 +112,9 @@ public class RightSideAuto extends SequentialCommandGroup {
                     new InstantCommand(() -> m_intake.setFlipSpeed(0), m_intake)
                 ),
                 new SequentialCommandGroup(
-                    new InstantCommand(() -> m_shooter.setAdjusterSpeed(MechanismConstants.kShooterAdjusterSpeed), m_shooter),
-                    new WaitCommand(2),
+                    new WaitCommand(0.5),
+                    new InstantCommand(() -> m_shooter.setAdjusterSpeed(MechanismConstants.kShooterAdjusterAutoSpeed), m_shooter),
+                    new WaitCommand(1.5),
                     new InstantCommand(() -> m_shooter.setAdjusterSpeed(0), m_shooter)
                 ),
                 new SequentialCommandGroup(
@@ -138,5 +164,5 @@ public class RightSideAuto extends SequentialCommandGroup {
                 IntakeCommands.StopRamp(m_ramp)
             );
         }
-	}
+        }
 } 
