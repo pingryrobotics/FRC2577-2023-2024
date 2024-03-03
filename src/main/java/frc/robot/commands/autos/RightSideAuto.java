@@ -71,7 +71,7 @@ public class RightSideAuto extends SequentialCommandGroup {
         addRequirements(m_intake);
         addRequirements(m_ramp);
 
-        Pose2d start = new Pose2d(0.73, 4.43, Rotation2d.fromDegrees(-42.82));
+        Pose2d start = new Pose2d(0.73, 4.43, Rotation2d.fromDegrees(-60));
 
         boolean flip = false;
 
@@ -91,7 +91,6 @@ public class RightSideAuto extends SequentialCommandGroup {
             Translation2d flippedStartTranslation = GeometryUtil.flipFieldPosition(start.getTranslation());
             Rotation2d flippedStartRotation = GeometryUtil.flipFieldRotation(start.getRotation());
             flippedStart = new Pose2d(flippedStartTranslation, flippedStartRotation);
-
         } else {
             flippedStart = start;
         }
