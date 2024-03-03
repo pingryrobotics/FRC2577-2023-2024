@@ -41,7 +41,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.trajectory.TrajectoryCommandGenerator;
 
 /** An example command that uses an example subsystem. */
-public class SideAuto extends SequentialCommandGroup {
+public class LeftSideAuto extends SequentialCommandGroup {
 	@SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final DriveSubsystem m_robotDrive;
     private final Shooter m_shooter;
@@ -53,7 +53,7 @@ public class SideAuto extends SequentialCommandGroup {
 	* One Piece Park Auto.
 	* Places preloaded piece (cube) onto node and parks on a third of the charge station
 	*/
-    public SideAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
+    public LeftSideAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
             SendableChooser<Integer> side_chooser) {
         
         m_robotDrive = drive;

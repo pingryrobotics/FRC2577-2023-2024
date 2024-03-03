@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechanismConstants;
@@ -24,6 +25,7 @@ public class Intake extends SubsystemBase {
     private CANSparkMax intakeMotor;
 	private CANSparkMax intakeFlipMotor;
 	private SparkPIDController m_pid;
+	private PIDController m_pidController;
 	private double desiredPos;
 	private boolean positionMode = false;
 	private double flipSpeed;
@@ -45,6 +47,10 @@ public class Intake extends SubsystemBase {
 		intakeFlipMotor.setIdleMode(IdleMode.kBrake);
 
 		m_pid = intakeFlipMotor.getPIDController();
+
+		m_pidController = new PIDController(MechanismConstants.kIntakeP, MechanismConstants.kIntakeI,
+				MechanismConstants.kIntakeD);
+		m_pidController.setIZone(MechanismConstants.kIntakeIZone);
 
 		m_pid.setP(MechanismConstants.kIntakeP);
 		m_pid.setI(MechanismConstants.kIntakeI);
@@ -77,7 +83,8 @@ public class Intake extends SubsystemBase {
 		SmartDashboard.putNumber("min output", m_pid.getOutputMin());
 
 		if (positionMode) {
-			SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
+			// SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
+			intakeFlipMotor.set(m_pidController.calculate(currPos, desiredPos));
 		} else {
 			intakeFlipMotor.set(flipSpeed);
 		}
@@ -96,7 +103,7 @@ public class Intake extends SubsystemBase {
 
 	public void setFlipSpeed(double speed) {
 		positionMode = false;
-		desiredPos = intakeFlipMotor.getEncoder().getPosition();
+		// desiredPos = intakeFlipMotor.getEncoder().getPosition();
 		flipSpeed = speed;
 	}
 

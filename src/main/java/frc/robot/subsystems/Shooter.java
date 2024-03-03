@@ -23,8 +23,9 @@ public class Shooter extends SubsystemBase {
 	private CANSparkMax shooterRight;
 	private CANSparkMax shooterAdjusterLeft;
 	private CANSparkMax shooterAdjusterRight;
-	private SparkPIDController m_pidLeft;
-	private SparkPIDController m_pidRight;
+	// private SparkPIDController m_pidLeft;
+	// private SparkPIDController m_pidRight;
+	private PIDController m_pid;
 	private double desiredPos;
 	private boolean positionMode = false;
 	private double shooterSpeed = 0;
@@ -50,23 +51,27 @@ public class Shooter extends SubsystemBase {
 		this.shooterAdjusterLeft.setIdleMode(IdleMode.kBrake);
 		this.shooterAdjusterRight.setIdleMode(IdleMode.kBrake);
 
-		this.m_pidLeft = shooterAdjusterLeft.getPIDController();
+		m_pid = new PIDController(MechanismConstants.kShooterAdjusterP, MechanismConstants.kShooterAdjusterI,
+				MechanismConstants.kShooterAdjusterD);
+		m_pid.setIZone(MechanismConstants.kShooterAdjusterIZone);
 
-		m_pidLeft.setP(MechanismConstants.kShooterAdjusterP);
-		m_pidLeft.setI(MechanismConstants.kShooterAdjusterI);
-		m_pidLeft.setD(MechanismConstants.kShooterAdjusterD);
-		m_pidLeft.setIZone(MechanismConstants.kShooterAdjusterIZone);
-		m_pidLeft.setFF(MechanismConstants.kShooterAdjusterFF);
-		m_pidLeft.setOutputRange(MechanismConstants.kShooterAdjusterMinOutput, MechanismConstants.kShooterAdjusterMaxOutput);
+		// this.m_pidLeft = shooterAdjusterLeft.getPIDController();
 
-		this.m_pidRight = shooterAdjusterLeft.getPIDController();
+		// m_pidLeft.setP(MechanismConstants.kShooterAdjusterP);
+		// m_pidLeft.setI(MechanismConstants.kShooterAdjusterI);
+		// m_pidLeft.setD(MechanismConstants.kShooterAdjusterD);
+		// m_pidLeft.setIZone(MechanismConstants.kShooterAdjusterIZone);
+		// m_pidLeft.setFF(MechanismConstants.kShooterAdjusterFF);
+		// m_pidLeft.setOutputRange(MechanismConstants.kShooterAdjusterMinOutput, MechanismConstants.kShooterAdjusterMaxOutput);
 
-		m_pidRight.setP(MechanismConstants.kShooterAdjusterP);
-		m_pidRight.setI(MechanismConstants.kShooterAdjusterI);
-		m_pidRight.setD(MechanismConstants.kShooterAdjusterD);
-		m_pidRight.setIZone(MechanismConstants.kShooterAdjusterIZone);
-		m_pidRight.setFF(MechanismConstants.kShooterAdjusterFF);
-		m_pidRight.setOutputRange(MechanismConstants.kShooterAdjusterMinOutput, MechanismConstants.kShooterAdjusterMaxOutput);
+		// this.m_pidRight = shooterAdjusterLeft.getPIDController();
+
+		// m_pidRight.setP(MechanismConstants.kShooterAdjusterP);
+		// m_pidRight.setI(MechanismConstants.kShooterAdjusterI);
+		// m_pidRight.setD(MechanismConstants.kShooterAdjusterD);
+		// m_pidRight.setIZone(MechanismConstants.kShooterAdjusterIZone);
+		// m_pidRight.setFF(MechanismConstants.kShooterAdjusterFF);
+		// m_pidRight.setOutputRange(MechanismConstants.kShooterAdjusterMinOutput, MechanismConstants.kShooterAdjusterMaxOutput);
 
 		positionMode = false;
 	}
@@ -87,8 +92,10 @@ public class Shooter extends SubsystemBase {
 		SmartDashboard.putBoolean("shooter position mode", positionMode);
 		
 		if (positionMode) {
-			m_pidLeft.setReference(desiredPos, ControlType.kPosition);
-			m_pidRight.setReference(desiredPos + (adjusterPosLeft - adjusterPosRight), ControlType.kPosition);
+			// m_pidLeft.setReference(desiredPos, ControlType.kPosition);
+			// m_pidRight.setReference(desiredPos + (adjusterPosLeft - adjusterPosRight), ControlType.kPosition);
+			shooterAdjusterLeft.set(m_pid.calculate(adjusterPosLeft, desiredPos));
+			shooterAdjusterRight.set(m_pid.calculate(adjusterPosRight, desiredPos));
 		} else {
 			shooterAdjusterLeft.set(adjusterSpeed);
 			shooterAdjusterRight.set(adjusterSpeed);
@@ -106,7 +113,7 @@ public class Shooter extends SubsystemBase {
 
 	public void setAdjusterSpeed(double speed) {
 		positionMode = false;
-		desiredPos = shooterAdjusterLeft.getEncoder().getPosition();
+		// desiredPos = shooterAdjusterLeft.getEncoder().getPosition();
 		this.adjusterSpeed = speed;
 	}
 
