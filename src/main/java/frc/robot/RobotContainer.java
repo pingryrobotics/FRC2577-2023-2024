@@ -31,6 +31,7 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.autos.DoNothingAuto;
 import frc.robot.commands.autos.LeftSideAuto;
+import frc.robot.commands.autos.OneNoteParkAuto;
 import frc.robot.commands.autos.RightSideAuto;
 import frc.robot.commands.climber_commands.Climb;
 import frc.robot.commands.intake_commands.IntakeCommands;
@@ -60,9 +61,9 @@ public class RobotContainer {
     // The robot's subsystems
     // private final Drive m_robotDrive = new Drive();
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final Intake m_intake = new Intake(
-            new CANSparkMax(Constants.MechanismConstants.kIntakeID, CANSparkMax.MotorType.kBrushless),
-            new CANSparkMax(Constants.MechanismConstants.kIntakeFlipID, CANSparkMax.MotorType.kBrushless));
+    // private final Intake m_intake = new Intake(
+            // new CANSparkMax(Constants.MechanismConstants.kIntakeID, CANSparkMax.MotorType.kBrushless),
+            // new CANSparkMax(Constants.MechanismConstants.kIntakeFlipID, CANSparkMax.MotorType.kBrushless));
     private final Shooter m_shooter = new Shooter(
             new CANSparkMax(MechanismConstants.kShooterLeftID, CANSparkMax.MotorType.kBrushless),
             new CANSparkMax(MechanismConstants.kShooterRightID, CANSparkMax.MotorType.kBrushless),
@@ -91,9 +92,9 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        // UsbCamera camera = CameraServer.startAutomaticCapture();
-        // camera.setFPS(30);
-        // camera.setResolution(256, 144);
+        UsbCamera camera = CameraServer.startAutomaticCapture();
+        camera.setFPS(30);
+        camera.setResolution(256, 144);
 
         side_chooser.setDefaultOption("Red Left", 0);
         side_chooser.addOption("Red Center", 1);
@@ -133,19 +134,28 @@ public class RobotContainer {
         
         // // Add commands to Autonomous Sendable Chooser
         m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto(m_robotDrive));
-        m_chooser.addOption("Side 3 Note Auto",
-                new LeftSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
-        m_chooser.addOption("Right Two Note Auto",
-                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
-        m_chooser.addOption("Right Three Note Auto",
-                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true));
+        // m_chooser.addOption("Side 3 Note Auto",
+                // new LeftSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
+        m_chooser.addOption("regular 1 note auto",
+                new OneNoteParkAuto(m_robotDrive, m_shooter, m_indexer, m_ramp, side_chooser, false));
+        m_chooser.addOption("park",
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_ramp, side_chooser, false, false, false, true));
+        m_chooser.addOption("Right 1 Note Auto No Park", 
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_ramp, side_chooser, true, false, false, false));
+        m_chooser.addOption("Right 1 Note Auto Park", 
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_ramp, side_chooser, true, false, false, true));
+        // m_chooser.addOption("Right Two Note Auto",
+                // new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, false, false));
+        // m_chooser.addOption("Right Three Note Auto",
+                // new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, true, false));
+        
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
     }
 
     public void resetEncoders() {
-        m_intake.resetEncoder();
+        // m_intake.resetEncoder();
         m_shooter.resetEncoder();
     }
 
@@ -162,13 +172,18 @@ public class RobotContainer {
 
         // INTAKE/RAMP COMMANDS
           
-        m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
-        m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
+        // m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
+        // m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
 
-        m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
-        m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
-        m_operatorController.circle().onTrue(IntakeCommands.IntakeRampOut(m_intake, m_ramp)); // intake & ramp wheels out
-        m_operatorController.circle().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
+        m_operatorController.square().onTrue(IntakeCommands.RampIn(m_ramp)); // intake & ramp wheels in
+        m_operatorController.square().onFalse(IntakeCommands.StopRamp(m_ramp)); // intake & ramp wheels stop
+        m_operatorController.circle().onTrue(IntakeCommands.RampOut(m_ramp)); // intake & ramp wheels out
+        m_operatorController.circle().onFalse(IntakeCommands.StopRamp(m_ramp)); // intake & ramp wheels stop
+
+        //         m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
+        // m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
+        // m_operatorController.circle().onTrue(IntakeCommands.IntakeRampOut(m_intake, m_ramp)); // intake & ramp wheels out
+        // m_operatorController.circle().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
 
         // SHOOTER ADJUSTMENT COMMANDS
 
@@ -214,20 +229,20 @@ public class RobotContainer {
         
         // OPERATOR JOYSTICK COMMANDS
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
-        if (-m_operatorController.getLeftY() > 0.2) { // moving joystick down is positive
-            double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
-            m_intake.setFlipSpeed(flipSpeed);
-            buttonStates.put("operatorLeftJoystick", true);
-        } else if (-m_operatorController.getLeftY() < -0.1) { // moving joystick up is negative
-            double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipDownSpeed;
-            m_intake.setFlipSpeed(flipSpeed);
-            buttonStates.put("operatorLeftJoystick", true);
-        } else {
-            if (buttonStates.containsKey("operatorLeftJoystick") && buttonStates.get("operatorLeftJoystick")) {
-                m_intake.setFlipSpeed(0);
-                buttonStates.put("operatorLeftJoystick", false);
-            }
-        }
+        // if (-m_operatorController.getLeftY() > 0.2) { // moving joystick down is positive
+        //     double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
+        //     m_intake.setFlipSpeed(flipSpeed);
+        //     buttonStates.put("operatorLeftJoystick", true);
+        // } else if (-m_operatorController.getLeftY() < -0.1) { // moving joystick up is negative
+        //     double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipDownSpeed;
+        //     m_intake.setFlipSpeed(flipSpeed);
+        //     buttonStates.put("operatorLeftJoystick", true);
+        // } else {
+        //     if (buttonStates.containsKey("operatorLeftJoystick") && buttonStates.get("operatorLeftJoystick")) {
+        //         m_intake.setFlipSpeed(0);
+        //         buttonStates.put("operatorLeftJoystick", false);
+        //     }
+        // }
 
         if (Math.abs(m_operatorController.getRightY()) > 0.1) {
             double adjusterSpeed = m_operatorController.getRightY() * MechanismConstants.kShooterAdjusterSpeed;

@@ -56,7 +56,7 @@ public class RightSideAuto extends SequentialCommandGroup {
 	* Places preloaded piece (cube) onto node and parks on a third of the charge station
 	*/
     public RightSideAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
-            SendableChooser<Integer> side_chooser, boolean three) {
+            SendableChooser<Integer> side_chooser, boolean one, boolean two, boolean three, boolean park) {
 
         m_robotDrive = drive;
         m_shooter = shooter;
@@ -102,42 +102,53 @@ public class RightSideAuto extends SequentialCommandGroup {
         Command path1Cmd = m_robotDrive.followPathCommand(path1);
         Command path2Cmd = m_robotDrive.followPathCommand(path2);
 
-        addCommands(
-            // IntakeCommands.IntakeDown(m_intake), // move intake down. command ends instantly but might take a second to actually move
-            new ParallelCommandGroup(
-                new SequentialCommandGroup(
-                    new InstantCommand(() -> m_intake.setFlipSpeed(-MechanismConstants.kIntakeFlipDownSpeed), m_intake),
-                    new WaitCommand(1),
-                    new InstantCommand(() -> m_intake.setFlipSpeed(0), m_intake)
+        if (one) {
+            addCommands(
+                // IntakeCommands.IntakeDown(m_intake), // move intake down. command ends instantly but might take a second to actually move
+                new ParallelCommandGroup(
+                    new SequentialCommandGroup(
+                        new InstantCommand(() -> m_intake.setFlipSpeed(-MechanismConstants.kIntakeFlipDownSpeed), m_intake),
+                        new WaitCommand(1),
+                        new InstantCommand(() -> m_intake.setFlipSpeed(0), m_intake)
+                    ),
+                    new SequentialCommandGroup(
+                        new WaitCommand(0.5),
+                        new InstantCommand(() -> m_shooter.setAdjusterSpeed(MechanismConstants.kShooterAdjusterAutoSpeed), m_shooter),
+                        new WaitCommand(1.5),
+                        new InstantCommand(() -> m_shooter.setAdjusterSpeed(0), m_shooter)
+                    )
+                    // ShooterCommands.AdjustShooterHigh(m_shooter)
                 ),
-                new SequentialCommandGroup(
-                    new WaitCommand(0.5),
-                    new InstantCommand(() -> m_shooter.setAdjusterSpeed(MechanismConstants.kShooterAdjusterAutoSpeed), m_shooter),
-                    new WaitCommand(1.5),
-                    new InstantCommand(() -> m_shooter.setAdjusterSpeed(0), m_shooter)
+                ShooterCommands.ShootAndIndex(m_shooter, m_indexer) // shoot once. 2ish seconds
+            );
+        }
+        if (park) { // park for 1 note
+            addCommands(
+                new InstantCommand(() -> m_robotDrive.drive(0, 0.5, 0, false, false)),
+                new WaitCommand(2),
+                new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false))
+            );
+        }
+        if (two) {
+            addCommands(
+                IntakeCommands.IntakeRampIn(intake, m_ramp), // intake and ramp in
+                new ParallelCommandGroup(
+                    path1Cmd // drive to top left pickup position. 1.5 seconds
                 ),
-                new SequentialCommandGroup(
-                    new WaitCommand(1.5),
-                    ShooterCommands.ShootAndIndex(m_shooter, m_indexer) // shoot once. 2ish seconds
-                )
-            ),
-            IntakeCommands.IntakeRampIn(intake, m_ramp), // intake and ramp in
-            new ParallelCommandGroup(
-                path1Cmd // drive to top left pickup position. 1.5 seconds
-            ),
-            new WaitCommand(1), // give it a second to intake and ramp the note
-            IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
-            ShooterCommands.Shoot(shooter),
-            new ParallelCommandGroup(
-                path2Cmd
-            ),
-            new WaitCommand(1),
-            ShooterCommands.Index(m_indexer), // shoot again, shooter is already running
-            new WaitCommand(1), // give it a second to shoot
-            ShooterCommands.StopIndexer(m_indexer),
-            ShooterCommands.StopShooter(m_shooter),
-            IntakeCommands.StopRamp(m_ramp)
-        );
+                new WaitCommand(1), // give it a second to intake and ramp the note
+                IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
+                ShooterCommands.ShootForward(shooter),
+                new ParallelCommandGroup(
+                    path2Cmd
+                ),
+                new WaitCommand(1),
+                ShooterCommands.IndexForward(m_indexer), // shoot again, shooter is already running
+                new WaitCommand(1), // give it a second to shoot
+                ShooterCommands.StopIndexer(m_indexer),
+                ShooterCommands.StopShooter(m_shooter),
+                IntakeCommands.StopRamp(m_ramp)
+            );
+        } 
         // go for 3rd note
         if (three) {
             String path3 = "3.3";
@@ -155,10 +166,10 @@ public class RightSideAuto extends SequentialCommandGroup {
                     path4Cmd,
                     new SequentialCommandGroup(
                         new WaitCommand(3),
-                        ShooterCommands.Shoot(m_shooter)
+                        ShooterCommands.ShootForward(m_shooter)
                     )
                 ),
-                    ShooterCommands.Index(m_indexer),
+                    ShooterCommands.IndexForward(m_indexer),
                     new WaitCommand(1),
                 IntakeCommands.StopRamp(m_ramp)
             );
