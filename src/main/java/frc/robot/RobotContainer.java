@@ -71,9 +71,9 @@ public class RobotContainer {
     private final Ramp m_ramp = new Ramp(new CANSparkMax(MechanismConstants.kRampID, CANSparkMax.MotorType.kBrushless));
     private final Indexer m_indexer = new Indexer(
             new CANSparkMax(MechanismConstants.kIndexerID, CANSparkMax.MotorType.kBrushless));
-    private final Climber m_climber = new Climber(
-            new CANSparkMax(MechanismConstants.kLeftClimberID, CANSparkMax.MotorType.kBrushless),
-            new CANSparkMax(MechanismConstants.kRightClimberID, CANSparkMax.MotorType.kBrushless));
+    // private final Climber m_climber = new Climber(
+    //         new CANSparkMax(MechanismConstants.kLeftClimberID, CANSparkMax.MotorType.kBrushless),
+    //         new CANSparkMax(MechanismConstants.kRightClimberID, CANSparkMax.MotorType.kBrushless));
 
     // The driver's controller
     CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
@@ -139,7 +139,6 @@ public class RobotContainer {
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
         m_chooser.addOption("Right Three Note Auto",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true));
-        
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
@@ -182,19 +181,19 @@ public class RobotContainer {
 
         // SHOOTER COMMANDS
 
-        // m_operatorController.L2().onTrue(ShooterCommands.Shoot(m_shooter)); // shooter on
-        // m_operatorController.L2().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
-        // m_operatorController.R2().onTrue(ShooterCommands.Index(m_indexer)); // indexer out
-        // m_operatorController.R2().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
-
-        m_operatorController.L1().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer)); // shooter on, wait, and indexer out
+        m_operatorController.L1().onTrue(ShooterCommands.ShootReverse(m_shooter)); // shooter on
+        m_operatorController.L1().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
+        m_operatorController.R1().onTrue(ShooterCommands.IndexReverse(m_indexer)); // indexer out
+        m_operatorController.R1().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
 
         m_operatorController.share().onTrue(new InstantCommand(() -> resetEncoders()));
 
+        m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
+
         m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
-        m_driverController.square().onTrue(new Climb(m_climber, MechanismConstants.kClimberSpeed));
-        m_driverController.square().onFalse(new Climb(m_climber, 0));
+        // m_driverController.square().onTrue(new Climb(m_climber, MechanismConstants.kClimberSpeed));
+        // m_driverController.square().onFalse(new Climb(m_climber, 0));
     }
 
     public void containerPeriodic() {

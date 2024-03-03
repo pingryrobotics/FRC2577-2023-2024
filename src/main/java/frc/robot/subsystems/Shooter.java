@@ -42,8 +42,8 @@ public class Shooter extends SubsystemBase {
 		this.shooterAdjusterRight = shooterAdjusterRight;
 		this.shooterLeft.setInverted(false);
 		this.shooterRight.setInverted(true);
-		this.shooterAdjusterLeft.setInverted(true);
-		this.shooterAdjusterRight.setInverted(true);
+		this.shooterAdjusterLeft.setInverted(false);
+		this.shooterAdjusterRight.setInverted(false);
 
 		this.shooterLeft.setIdleMode(IdleMode.kCoast);
 		this.shooterRight.setIdleMode(IdleMode.kCoast);

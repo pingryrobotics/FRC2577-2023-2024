@@ -25,14 +25,15 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class MechanismConstants { // remove the "FINE TUNE VALUE" comments as you tweak them
-    public static final double kIntakeInSpeed = 0.3; // FINE TUNE VALUE
-    public static final double kIntakeOutSpeed = 0.3;
+    public static final double kIntakeInSpeed = 0.45; // FINE TUNE VALUE
+    public static final double kIntakeOutSpeed = 0.45;
     public static final double kIntakeFlipUpSpeed = 0.1; // FINE TUNE VALUE
     public static final double kIntakeFlipDownSpeed = 0.1; // FINE TUNE VALUE
-    public static final double kShooterSpeed = 1; // FINE TUNE VALUE
+    public static final double kShooterSpeed = 0.5; // FINE TUNE VALUE
+    public static final double kShooterAutoSpeed = 0.7;
     public static final double kShooterAdjusterSpeed = 0.1;
     public static final double kShooterAdjusterAutoSpeed = 0.2;
-    public static final double kRampInSpeed = 0.4; // FINE TUNE values
+    public static final double kRampInSpeed = 0.2; // FINE TUNE values
     public static final double kRampOutSpeed = 0.3; // FINE TUNE values
     public static final double kIndexerSpeed = -0.5; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;

@@ -40,7 +40,7 @@ public class Intake extends SubsystemBase {
 		intakeFlipMotor.restoreFactoryDefaults();
 		intakeMotor.restoreFactoryDefaults();
 
-		intakeMotor.setInverted(false);
+		intakeMotor.setInverted(true);
 		intakeFlipMotor.setInverted(true);
 
 		intakeMotor.setIdleMode(IdleMode.kCoast);

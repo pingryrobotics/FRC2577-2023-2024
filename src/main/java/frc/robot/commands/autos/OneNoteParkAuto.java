@@ -41,20 +41,22 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.util.trajectory.TrajectoryCommandGenerator;
 
 /** An example command that uses an example subsystem. */
-public class LeftSideAuto extends SequentialCommandGroup {
+public class OneNoteParkAuto extends SequentialCommandGroup {
 	@SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final DriveSubsystem m_robotDrive;
     private final Shooter m_shooter;
     private final Indexer m_indexer;
     private final Intake m_intake;
     private final Ramp m_ramp;
+    private double ySpeed = 0;
+    private double xSpeed = 0;
 
 	/**
 	* One Piece Park Auto.
 	* Places preloaded piece (cube) onto node and parks on a third of the charge station
 	*/
-    public LeftSideAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
-            SendableChooser<Integer> side_chooser) {
+    public OneNoteParkAuto(DriveSubsystem drive, Shooter shooter, Indexer indexer, Intake intake, Ramp ramp,
+            SendableChooser<Integer> side_chooser, boolean park) {
         
         m_robotDrive = drive;
         m_shooter = shooter;
@@ -69,48 +71,50 @@ public class LeftSideAuto extends SequentialCommandGroup {
         addRequirements(m_intake);
         addRequirements(m_ramp);
 
-        m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-2*Math.PI/3)));
+        switch (side_chooser.getSelected()) {
+            case 0: // red left
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
+                ySpeed = 0;
+                xSpeed = 0;
+            case 1: // red center
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
+                ySpeed = 0.06;
+                xSpeed = 0.4;
+            case 2: // red right
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
+                // ySpeed = 0.2*Math.cos(-Math.PI/3);
+                // xSpeed = 0.2*Math.sin(-Math.PI/3);
+            case 3: // blue left
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
+                // ySpeed = 0.2*Math.cos(Math.PI/3);
+                // xSpeed = 0.2*Math.sin(Math.PI/3);
+            case 4: // blue center
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
+                ySpeed = -0.06;
+                xSpeed = 0.4;
+            case 5: // blue right
+                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
+                ySpeed = 0;
+                xSpeed = 0;
+        }
 
-        String path1 = "2.1";
-        String path2 = "2.2";
-
-        Command path1Cmd = m_robotDrive.followPathCommand(path1);
-        Command path2Cmd = m_robotDrive.followPathCommand(path2);
+        if (!park) {
+            xSpeed = 0;
+            ySpeed = 0;
+        }
 
         addCommands(
-            IntakeCommands.IntakeDown(m_intake), // move intake down. command ends instantly but might take a second to actually move
-            ShooterCommands.ShootAndIndex(m_shooter, m_indexer), // shoot once. 3 seconds
-            IntakeCommands.IntakeRampIn(intake, m_ramp), // intake and ramp in
-            new ParallelCommandGroup(
-                path1Cmd // drive to top left shooting position. 1.5 seconds
-            ),
-            new WaitCommand(2), // give it a second to intake and ramp the note
-            IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
-            ShooterCommands.IndexForward(m_indexer), // shoot again, shooter is already running
-            new WaitCommand(1), // give it a second to shoot
-            ShooterCommands.StopIndexer(m_indexer),
+            IntakeCommands.IntakeRampIn(m_intake, m_ramp),
+            ShooterCommands.ShootForward(m_shooter),
+            new WaitCommand(3),
+            ShooterCommands.IndexForward(m_indexer),
+            new WaitCommand(2),
             ShooterCommands.StopShooter(m_shooter),
-            IntakeCommands.StopRamp(m_ramp),
-            new ParallelCommandGroup(
-                path2Cmd, // 2nd path to drive to top right pickup and back. 2.75 seconds to get there, 2.75 seconds to get back
-                new SequentialCommandGroup( // start up shooter halfway through path
-                    new WaitCommand(3),
-                    ShooterCommands.ShootForward(m_shooter)
-                ), 
-                new SequentialCommandGroup( // start up intake and ramp when we're almost there
-                    new WaitCommand(1.5),
-                    IntakeCommands.IntakeRampIn(m_intake, m_ramp),
-                    new WaitCommand(3),
-                    IntakeCommands.StopIntake(m_intake)
-                )
-            ),
-            new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
-            new WaitCommand(0.5), // give it time to stop
-            ShooterCommands.IndexForward(m_indexer), // index the last note
-            new WaitCommand(1), // give it a second to shoot
             ShooterCommands.StopIndexer(m_indexer),
-            ShooterCommands.StopShooter(m_shooter),
-            IntakeCommands.StopRamp(m_ramp)
+            IntakeCommands.IntakeRampStop(m_intake, m_ramp),
+            new InstantCommand(() -> m_robotDrive.drive(xSpeed, ySpeed, 0, false, false)),
+            new WaitCommand(3),
+            new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false))
         );
 	}
 } 
