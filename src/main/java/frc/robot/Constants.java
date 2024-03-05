@@ -77,6 +77,9 @@ public final class Constants {
     public static final int kIntakeFlipID = 41;
     public static final int kLeftClimberID = 54;
     public static final int kRightClimberID = 53; 
+
+    //Blinkin Port
+     public static final int LightsPWM = 0;
   }
 
   public static final class DriveConstants {
