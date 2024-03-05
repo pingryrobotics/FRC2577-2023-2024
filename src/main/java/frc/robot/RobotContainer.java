@@ -189,7 +189,11 @@ public class RobotContainer {
 
         m_operatorController.share().onTrue(new InstantCommand(() -> resetEncoders()));
 
-        m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
+        //old alan code
+        //m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
+
+        //new jame code
+        m_operatorController.touchpad().onTrue(ShooterCommands.ShootForward(m_shooter));
 
         m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
@@ -260,8 +264,11 @@ public class RobotContainer {
 
         if (m_operatorController.getHID().getR2Button()) {
             m_indexer.setSpeed(MechanismConstants.kIndexerSpeed * m_operatorController.getHID().getR2Axis());
+            m_intake.setSpeed(MechanismConstants.kIntakeInSpeed * m_operatorController.getHID().getR2Axis());
         } else if (m_operatorController.getHID().getR2ButtonReleased()) {
             m_indexer.setSpeed(0);
+            m_intake.setSpeed(0);
+            m_shooter.setSpeed(0);
         }
 
     }
