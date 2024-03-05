@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS5Controller.Button;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -199,6 +200,15 @@ public class RobotContainer {
     public void containerPeriodic() {
 
         // DRIVE COMMANDS
+        double shooterSpeed = m_shooter.getSpeed();
+
+        if(shooterSpeed > .7) {
+            m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
+            m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
+        } else {
+           m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
+            m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .0);
+        }
 
         if (m_driverController.getHID().getL2Button()) {
             m_robotDrive.slowModeOn();
