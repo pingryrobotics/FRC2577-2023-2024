@@ -32,6 +32,7 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.autos.DoNothingAuto;
 import frc.robot.commands.autos.LeftSideAuto;
+import frc.robot.commands.autos.MiddleTwoAuto;
 import frc.robot.commands.autos.RightSideAuto;
 import frc.robot.commands.climber_commands.Climb;
 import frc.robot.commands.intake_commands.IntakeCommands;
@@ -140,6 +141,8 @@ public class RobotContainer {
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
         m_chooser.addOption("Right Three Note Auto",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true));
+        m_chooser.addOption("Middle Two Note Auto",
+                new MiddleTwoAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
