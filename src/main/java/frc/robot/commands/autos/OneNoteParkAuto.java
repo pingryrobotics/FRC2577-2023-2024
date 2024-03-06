@@ -71,48 +71,49 @@ public class OneNoteParkAuto extends SequentialCommandGroup {
         addRequirements(m_intake);
         addRequirements(m_ramp);
 
-        switch (side_chooser.getSelected()) {
-            case 0: // red left
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
-                ySpeed = 0;
-                xSpeed = 0;
-            case 1: // red center
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
-                ySpeed = 0.06;
-                xSpeed = 0.4;
-            case 2: // red right
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
-                // ySpeed = 0.2*Math.cos(-Math.PI/3);
-                // xSpeed = 0.2*Math.sin(-Math.PI/3);
-            case 3: // blue left
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
-                // ySpeed = 0.2*Math.cos(Math.PI/3);
-                // xSpeed = 0.2*Math.sin(Math.PI/3);
-            case 4: // blue center
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
-                ySpeed = -0.06;
-                xSpeed = 0.4;
-            case 5: // blue right
-                m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
-                ySpeed = 0;
-                xSpeed = 0;
-        }
+        // switch (side_chooser.getSelected()) {
+        //     case 0: // red left
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
+        //         ySpeed = 0;
+        //         xSpeed = 0;
+        //     case 1: // red center
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
+        //         ySpeed = 0.06;
+        //         xSpeed = 0.4;
+        //     case 2: // red right
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
+        //         // ySpeed = 0.2*Math.cos(-Math.PI/3);
+        //         // xSpeed = 0.2*Math.sin(-Math.PI/3);
+        //     case 3: // blue left
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(Math.PI/3)));
+        //         // ySpeed = 0.2*Math.cos(Math.PI/3);
+        //         // xSpeed = 0.2*Math.sin(Math.PI/3);
+        //     case 4: // blue center
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(0)));
+        //         ySpeed = -0.06;
+        //         xSpeed = 0.4;
+        //     case 5: // blue right
+        //         m_robotDrive.resetOdometry(new Pose2d(0.68, 6.69, new Rotation2d(-Math.PI/3)));
+        //         ySpeed = 0;
+        //         xSpeed = 0;
+        // }
 
-        if (!park) {
-            xSpeed = 0;
-            ySpeed = 0;
-        }
+        // if (!park) {
+        //     xSpeed = 0;
+        //     ySpeed = 0;
+        // }
 
         addCommands(
-            IntakeCommands.IntakeRampIn(m_intake, m_ramp),
+            // IntakeCommands.IntakeRampIn(m_intake, m_ramp),
+            IntakeCommands.RampIn(m_ramp),
             ShooterCommands.ShootForward(m_shooter),
             new WaitCommand(3),
             ShooterCommands.IndexForward(m_indexer),
             new WaitCommand(2),
             ShooterCommands.StopShooter(m_shooter),
             ShooterCommands.StopIndexer(m_indexer),
-            IntakeCommands.IntakeRampStop(m_intake, m_ramp),
-            new InstantCommand(() -> m_robotDrive.drive(xSpeed, ySpeed, 0, false, false)),
+            IntakeCommands.StopRamp(m_ramp),
+            new InstantCommand(() -> m_robotDrive.drive(0, 0.5, 0, false, false)),
             new WaitCommand(3),
             new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false))
         );
