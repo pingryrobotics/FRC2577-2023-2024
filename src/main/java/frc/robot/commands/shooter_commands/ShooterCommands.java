@@ -21,6 +21,7 @@ public class ShooterCommands {
                 new Shoot(m_shooter, 0));
     }
 
+
     public static Command ShootForward(Shooter m_shooter) {
         return new Shoot(m_shooter, MechanismConstants.kShooterSpeed);
     }

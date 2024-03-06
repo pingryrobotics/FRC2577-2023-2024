@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS5Controller.Button;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -31,8 +32,9 @@ import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.autos.DoNothingAuto;
 import frc.robot.commands.autos.LeftSideAuto;
-import frc.robot.commands.autos.OneNoteParkAuto;
+import frc.robot.commands.autos.MiddleTwoAuto;
 import frc.robot.commands.autos.RightSideAuto;
+import frc.robot.commands.autos.OneNoteParkAuto;
 import frc.robot.commands.climber_commands.Climb;
 import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
@@ -147,8 +149,9 @@ public class RobotContainer {
         m_chooser.addOption("Right Two Note Auto",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, false, false));
         m_chooser.addOption("Right Three Note Auto",
-                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, true, false));
-        
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, false));
+        m_chooser.addOption("Middle Two Note Auto",
+                new MiddleTwoAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
 
         // Put the chooser on the dashboard
         SmartDashboard.putData("Auto mode", m_chooser);
@@ -198,7 +201,11 @@ public class RobotContainer {
 
         m_operatorController.share().onTrue(new InstantCommand(() -> resetEncoders()));
 
-        m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
+        //old alan code
+        //m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
+
+        //new jame code
+        m_operatorController.touchpad().onTrue(ShooterCommands.ShootForward(m_shooter));
 
         m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
@@ -209,6 +216,15 @@ public class RobotContainer {
     public void containerPeriodic() {
 
         // DRIVE COMMANDS
+        double shooterSpeed = m_shooter.getSpeed();
+
+        if(shooterSpeed > .7) {
+            m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
+            m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
+        } else {
+           m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
+            m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .0);
+        }
 
         if (m_driverController.getHID().getL2Button()) {
             m_robotDrive.slowModeOn();
@@ -260,8 +276,11 @@ public class RobotContainer {
 
         if (m_operatorController.getHID().getR2Button()) {
             m_indexer.setSpeed(MechanismConstants.kIndexerSpeed * m_operatorController.getHID().getR2Axis());
+            m_intake.setSpeed(MechanismConstants.kIntakeInSpeed * m_operatorController.getHID().getR2Axis());
         } else if (m_operatorController.getHID().getR2ButtonReleased()) {
             m_indexer.setSpeed(0);
+            m_intake.setSpeed(0);
+            m_shooter.setSpeed(0);
         }
 
     }

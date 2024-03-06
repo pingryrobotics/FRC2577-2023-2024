@@ -125,4 +125,8 @@ public class Shooter extends SubsystemBase {
 	public double getPosition() {
 		return (shooterAdjusterLeft.getEncoder().getPosition() + shooterAdjusterRight.getEncoder().getPosition()) / 2;
 	}
+
+	public double getSpeed() {
+		return shooterSpeed;
+	}
 }
