@@ -46,15 +46,15 @@ public class ShooterCommands {
         return new Index(m_indexer, 0);
     }
 
-    public static Command AdjustShooterHigh(Shooter m_shooter) {
-        return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterHigh);
-    }
+//     public static Command AdjustShooterHigh(Shooter m_shooter) {
+//         return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterHigh);
+//     }
 
-    public static Command AdjustShooterLow(Shooter m_shooter) {
-        return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterLow);
-    }
+//     public static Command AdjustShooterLow(Shooter m_shooter) {
+//         return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterLow);
+//     }
 
-    public static Command AdjustShooterMid(Shooter m_shooter) {
-        return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterMid);
-    }
+//     public static Command AdjustShooterMid(Shooter m_shooter) {
+//         return new ShooterPID(m_shooter, MechanismConstants.kShooterAdjusterMid);
+//     }
 }

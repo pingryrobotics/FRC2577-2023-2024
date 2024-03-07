@@ -110,12 +110,6 @@ public class RightSideAuto extends SequentialCommandGroup {
                         new InstantCommand(() -> m_intake.setFlipSpeed(-MechanismConstants.kIntakeFlipDownSpeed), m_intake),
                         new WaitCommand(1),
                         new InstantCommand(() -> m_intake.setFlipSpeed(0), m_intake)
-                    ),
-                    new SequentialCommandGroup(
-                        new WaitCommand(0.5),
-                        new InstantCommand(() -> m_shooter.setAdjusterSpeed(MechanismConstants.kShooterAdjusterAutoSpeed), m_shooter),
-                        new WaitCommand(1.5),
-                        new InstantCommand(() -> m_shooter.setAdjusterSpeed(0), m_shooter)
                     )
                     // ShooterCommands.AdjustShooterHigh(m_shooter)
                 ),
@@ -135,7 +129,6 @@ public class RightSideAuto extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     path1Cmd // drive to top left pickup position. 1.5 seconds
                 ),
-<<<<<<< Updated upstream
                 new WaitCommand(1), // give it a second to intake and ramp the note
                 IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
                 ShooterCommands.ShootForward(shooter),
@@ -150,30 +143,6 @@ public class RightSideAuto extends SequentialCommandGroup {
                 IntakeCommands.StopRamp(m_ramp)
             );
         } 
-=======
-                new SequentialCommandGroup(
-                    new WaitCommand(1.5),
-                    ShooterCommands.ShootAndIndex(m_shooter, m_indexer) // shoot once. 2ish seconds
-                )
-            ),
-            IntakeCommands.IntakeRampIn(intake, m_ramp), // intake and ramp in
-            new ParallelCommandGroup(
-                path1Cmd // drive to top left pickup position. 1.5 seconds
-            ),
-            new WaitCommand(1), // give it a second to intake and ramp the note
-            IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
-            ShooterCommands.ShootForward(shooter),
-            new ParallelCommandGroup(
-                path2Cmd
-            ),
-            new WaitCommand(1),
-            ShooterCommands.IndexForward(m_indexer), // shoot again, shooter is already running
-            new WaitCommand(1), // give it a second to shoot
-            ShooterCommands.StopIndexer(m_indexer),
-            ShooterCommands.StopShooter(m_shooter),
-            IntakeCommands.StopRamp(m_ramp)
-        );
->>>>>>> Stashed changes
         // go for 3rd note
         if (three) {
             String path3 = "3.3";

@@ -21,39 +21,38 @@ import frc.robot.Constants.MechanismConstants;;
 public class Shooter extends SubsystemBase {
 	private CANSparkMax shooterLeft;
 	private CANSparkMax shooterRight;
-	private CANSparkMax shooterAdjusterLeft;
-	private CANSparkMax shooterAdjusterRight;
+	// private CANSparkMax shooterAdjusterLeft;
+	// private CANSparkMax shooterAdjusterRight;
 	// private SparkPIDController m_pidLeft;
 	// private SparkPIDController m_pidRight;
 	private PIDController m_pid;
 	private double desiredPos;
 	private boolean positionMode = false;
 	private double shooterSpeed = 0;
-	private double adjusterSpeed = 0;
+	// private double adjusterSpeed = 0;
 
 	/**
 	 * Creates a new ExampleSubsystem.
 	 */
-	public Shooter(CANSparkMax shooterLeft, CANSparkMax shooterRight, CANSparkMax shooterAdjusterLeft,
-			CANSparkMax shooterAdjusterRight) {
+	public Shooter(CANSparkMax shooterLeft, CANSparkMax shooterRight) {
 		this.shooterLeft = shooterLeft;
 		this.shooterRight = shooterRight;
-		this.shooterAdjusterLeft = shooterAdjusterLeft;
-		this.shooterAdjusterRight = shooterAdjusterRight;
+		// this.shooterAdjusterLeft = shooterAdjusterLeft;
+		// this.shooterAdjusterRight = shooterAdjusterRight;
 		this.shooterLeft.setInverted(false);
 		this.shooterRight.setInverted(true);
-		this.shooterAdjusterLeft.setInverted(false);
-		this.shooterAdjusterRight.setInverted(false);
+		// this.shooterAdjusterLeft.setInverted(false);
+		// this.shooterAdjusterRight.setInverted(false);
 
 		this.shooterLeft.setIdleMode(IdleMode.kCoast);
 		this.shooterRight.setIdleMode(IdleMode.kCoast);
 
-		this.shooterAdjusterLeft.setIdleMode(IdleMode.kBrake);
-		this.shooterAdjusterRight.setIdleMode(IdleMode.kBrake);
+		// this.shooterAdjusterLeft.setIdleMode(IdleMode.kBrake);
+		// this.shooterAdjusterRight.setIdleMode(IdleMode.kBrake);
 
-		m_pid = new PIDController(MechanismConstants.kShooterAdjusterP, MechanismConstants.kShooterAdjusterI,
-				MechanismConstants.kShooterAdjusterD);
-		m_pid.setIZone(MechanismConstants.kShooterAdjusterIZone);
+		// m_pid = new PIDController(MechanismConstants.kShooterAdjusterP, MechanismConstants.kShooterAdjusterI,
+				// MechanismConstants.kShooterAdjusterD);
+		// m_pid.setIZone(MechanismConstants.kShooterAdjusterIZone);
 
 		// this.m_pidLeft = shooterAdjusterLeft.getPIDController();
 
@@ -83,23 +82,23 @@ public class Shooter extends SubsystemBase {
 		shooterLeft.set(shooterSpeed);
 		shooterRight.set(shooterSpeed);
 
-		double adjusterPosLeft = shooterAdjusterLeft.getEncoder().getPosition();
-		double adjusterPosRight = shooterAdjusterRight.getEncoder().getPosition();
+		// double adjusterPosLeft = shooterAdjusterLeft.getEncoder().getPosition();
+		// double adjusterPosRight = shooterAdjusterRight.getEncoder().getPosition();
 
-		SmartDashboard.putNumber("Current Shooter Position Left (main) (rotations)", adjusterPosLeft);
-		SmartDashboard.putNumber("Current Shooter Position Right (rotations)", adjusterPosRight);
-		SmartDashboard.putNumber("Desired Shooter Position (rotations)", desiredPos);
-		SmartDashboard.putBoolean("shooter position mode", positionMode);
+		// SmartDashboard.putNumber("Current Shooter Position Left (main) (rotations)", adjusterPosLeft);
+		// SmartDashboard.putNumber("Current Shooter Position Right (rotations)", adjusterPosRight);
+		// SmartDashboard.putNumber("Desired Shooter Position (rotations)", desiredPos);
+		// SmartDashboard.putBoolean("shooter position mode", positionMode);
 		
-		if (positionMode) {
-			// m_pidLeft.setReference(desiredPos, ControlType.kPosition);
-			// m_pidRight.setReference(desiredPos + (adjusterPosLeft - adjusterPosRight), ControlType.kPosition);
-			shooterAdjusterLeft.set(m_pid.calculate(adjusterPosLeft, desiredPos));
-			shooterAdjusterRight.set(m_pid.calculate(adjusterPosRight, desiredPos));
-		} else {
-			shooterAdjusterLeft.set(adjusterSpeed);
-			shooterAdjusterRight.set(adjusterSpeed);
-		}
+		// if (positionMode) {
+		// 	// m_pidLeft.setReference(desiredPos, ControlType.kPosition);
+		// 	// m_pidRight.setReference(desiredPos + (adjusterPosLeft - adjusterPosRight), ControlType.kPosition);
+		// 	shooterAdjusterLeft.set(m_pid.calculate(adjusterPosLeft, desiredPos));
+		// 	shooterAdjusterRight.set(m_pid.calculate(adjusterPosRight, desiredPos));
+		// } else {
+		// 	shooterAdjusterLeft.set(adjusterSpeed);
+		// 	shooterAdjusterRight.set(adjusterSpeed);
+		// }
 	}
 
 	public void setPosition(double position) {
@@ -111,20 +110,20 @@ public class Shooter extends SubsystemBase {
 		this.shooterSpeed = speed;
 	}
 
-	public void setAdjusterSpeed(double speed) {
-		positionMode = false;
-		// desiredPos = shooterAdjusterLeft.getEncoder().getPosition();
-		this.adjusterSpeed = speed;
-	}
+	// public void setAdjusterSpeed(double speed) {
+	// 	positionMode = false;
+	// 	// desiredPos = shooterAdjusterLeft.getEncoder().getPosition();
+	// 	this.adjusterSpeed = speed;
+	// }
 
-	public void resetEncoder() {
-		shooterAdjusterLeft.getEncoder().setPosition(0);
-		shooterAdjusterRight.getEncoder().setPosition(0);
-	}
+	// public void resetEncoder() {
+	// 	shooterAdjusterLeft.getEncoder().setPosition(0);
+	// 	shooterAdjusterRight.getEncoder().setPosition(0);
+	// }
 
-	public double getPosition() {
-		return (shooterAdjusterLeft.getEncoder().getPosition() + shooterAdjusterRight.getEncoder().getPosition()) / 2;
-	}
+	// public double getPosition() {
+	// 	return (shooterAdjusterLeft.getEncoder().getPosition() + shooterAdjusterRight.getEncoder().getPosition()) / 2;
+	// }
 
 	public double getSpeed() {
 		return shooterSpeed;

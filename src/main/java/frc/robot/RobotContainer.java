@@ -68,9 +68,7 @@ public class RobotContainer {
             new CANSparkMax(Constants.MechanismConstants.kIntakeFlipID, CANSparkMax.MotorType.kBrushless));
     private final Shooter m_shooter = new Shooter(
             new CANSparkMax(MechanismConstants.kShooterLeftID, CANSparkMax.MotorType.kBrushless),
-            new CANSparkMax(MechanismConstants.kShooterRightID, CANSparkMax.MotorType.kBrushless),
-            new CANSparkMax(MechanismConstants.kShooterAdjusterLeftID, CANSparkMax.MotorType.kBrushless),
-            new CANSparkMax(MechanismConstants.kShooterAdjusterRightID, CANSparkMax.MotorType.kBrushless));
+            new CANSparkMax(MechanismConstants.kShooterRightID, CANSparkMax.MotorType.kBrushless));
     private final Ramp m_ramp = new Ramp(new CANSparkMax(MechanismConstants.kRampID, CANSparkMax.MotorType.kBrushless));
     private final Indexer m_indexer = new Indexer(
             new CANSparkMax(MechanismConstants.kIndexerID, CANSparkMax.MotorType.kBrushless));
@@ -159,7 +157,6 @@ public class RobotContainer {
 
     public void resetEncoders() {
         m_intake.resetEncoder();
-        m_shooter.resetEncoder();
     }
 
     /**
@@ -185,12 +182,12 @@ public class RobotContainer {
 
         // SHOOTER ADJUSTMENT COMMANDS
 
-        // UP POV
-        m_operatorController.pov(0).onTrue(ShooterCommands.AdjustShooterHigh(m_shooter)); // shooter adjust to high
-        // RIGHT POV
-        m_operatorController.pov(90).onTrue(ShooterCommands.AdjustShooterMid(m_shooter)); // shooter adjust to mid
-        // DOWN POV
-        m_operatorController.pov(180).onTrue(ShooterCommands.AdjustShooterLow(m_shooter)); // shooter adjust to low
+        // // UP POV
+        // m_operatorController.pov(0).onTrue(ShooterCommands.AdjustShooterHigh(m_shooter)); // shooter adjust to high
+        // // RIGHT POV
+        // m_operatorController.pov(90).onTrue(ShooterCommands.AdjustShooterMid(m_shooter)); // shooter adjust to mid
+        // // DOWN POV
+        // m_operatorController.pov(180).onTrue(ShooterCommands.AdjustShooterLow(m_shooter)); // shooter adjust to low
 
         // SHOOTER COMMANDS
 
@@ -255,16 +252,16 @@ public class RobotContainer {
             }
         }
 
-        if (Math.abs(m_operatorController.getRightY()) > 0.1) {
-            double adjusterSpeed = m_operatorController.getRightY() * MechanismConstants.kShooterAdjusterSpeed;
-            m_shooter.setAdjusterSpeed(adjusterSpeed);
-            buttonStates.put("operatorRightJoystick", true);
-        } else {
-            if (buttonStates.containsKey("operatorRightJoystick") && buttonStates.get("operatorRightJoystick")) {
-                m_shooter.setAdjusterSpeed(0);
-                buttonStates.put("operatorRightJoystick", false);
-            }
-        }
+        // if (Math.abs(m_operatorController.getRightY()) > 0.1) {
+        //     double adjusterSpeed = m_operatorController.getRightY() * MechanismConstants.kShooterAdjusterSpeed;
+        //     m_shooter.setAdjusterSpeed(adjusterSpeed);
+        //     buttonStates.put("operatorRightJoystick", true);
+        // } else {
+        //     if (buttonStates.containsKey("operatorRightJoystick") && buttonStates.get("operatorRightJoystick")) {
+        //         m_shooter.setAdjusterSpeed(0);
+        //         buttonStates.put("operatorRightJoystick", false);
+        //     }
+        // }
 
         // OPERATOR CONTROLLER COMMANDS
 
