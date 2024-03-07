@@ -135,6 +135,7 @@ public class RightSideAuto extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                     path1Cmd // drive to top left pickup position. 1.5 seconds
                 ),
+<<<<<<< Updated upstream
                 new WaitCommand(1), // give it a second to intake and ramp the note
                 IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
                 ShooterCommands.ShootForward(shooter),
@@ -149,6 +150,30 @@ public class RightSideAuto extends SequentialCommandGroup {
                 IntakeCommands.StopRamp(m_ramp)
             );
         } 
+=======
+                new SequentialCommandGroup(
+                    new WaitCommand(1.5),
+                    ShooterCommands.ShootAndIndex(m_shooter, m_indexer) // shoot once. 2ish seconds
+                )
+            ),
+            IntakeCommands.IntakeRampIn(intake, m_ramp), // intake and ramp in
+            new ParallelCommandGroup(
+                path1Cmd // drive to top left pickup position. 1.5 seconds
+            ),
+            new WaitCommand(1), // give it a second to intake and ramp the note
+            IntakeCommands.StopIntake(m_intake), // keep ramp going so it feeds into indexer
+            ShooterCommands.ShootForward(shooter),
+            new ParallelCommandGroup(
+                path2Cmd
+            ),
+            new WaitCommand(1),
+            ShooterCommands.IndexForward(m_indexer), // shoot again, shooter is already running
+            new WaitCommand(1), // give it a second to shoot
+            ShooterCommands.StopIndexer(m_indexer),
+            ShooterCommands.StopShooter(m_shooter),
+            IntakeCommands.StopRamp(m_ramp)
+        );
+>>>>>>> Stashed changes
         // go for 3rd note
         if (three) {
             String path3 = "3.3";
