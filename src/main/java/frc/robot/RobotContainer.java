@@ -34,6 +34,7 @@ import frc.robot.commands.autos.DoNothingAuto;
 import frc.robot.commands.autos.LeftSideAuto;
 import frc.robot.commands.autos.MiddleTwoAuto;
 import frc.robot.commands.autos.RightSideAuto;
+import frc.robot.commands.autos.OneNoteParkAuto;
 import frc.robot.commands.climber_commands.Climb;
 import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
@@ -97,9 +98,9 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        // UsbCamera camera = CameraServer.startAutomaticCapture();
-        // camera.setFPS(30);
-        // camera.setResolution(256, 144);
+        UsbCamera camera = CameraServer.startAutomaticCapture();
+        camera.setFPS(30);
+        camera.setResolution(256, 144);
 
         side_chooser.setDefaultOption("Red Left", 0);
         side_chooser.addOption("Red Center", 1);
@@ -147,10 +148,18 @@ public class RobotContainer {
         m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto(m_robotDrive));
         m_chooser.addOption("Side 3 Note Auto",
                 new LeftSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
+        m_chooser.addOption("regular 1 note auto",
+                new OneNoteParkAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
+        m_chooser.addOption("park",
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false, false, false, true));
+        m_chooser.addOption("Right 1 Note Auto No Park", 
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, false));
+        m_chooser.addOption("Right 1 Note Auto Park", 
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, true));
         m_chooser.addOption("Right Two Note Auto",
-                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, false, false));
         m_chooser.addOption("Right Three Note Auto",
-                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true));
+                new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, false));
         m_chooser.addOption("Middle Two Note Auto",
                 new MiddleTwoAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser));
 
