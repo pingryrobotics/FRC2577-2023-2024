@@ -39,6 +39,7 @@ import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Blinkin;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -77,6 +78,9 @@ public class RobotContainer {
     //         new CANSparkMax(MechanismConstants.kLeftClimberID, CANSparkMax.MotorType.kBrushless),
     //         new CANSparkMax(MechanismConstants.kRightClimberID, CANSparkMax.MotorType.kBrushless));
 
+    //shooter leds
+    Blinkin funnyleds = new Blinkin();
+
     // The driver's controller
     CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
     CommandPS4Controller m_operatorController = new CommandPS4Controller(OIConstants.kOperatorControllerPort);
@@ -105,6 +109,12 @@ public class RobotContainer {
         side_chooser.addOption("Blue Right", 5);
 
         SmartDashboard.putData("Side", side_chooser);
+
+        if(Blinkin.isRed()){
+            funnyleds.LightsRed();
+        } else{
+            funnyleds.LightsBlue();
+        }
 
         m_robotDrive.setDefaultCommand(
             // The left stick controls translation of the robot.
@@ -212,9 +222,17 @@ public class RobotContainer {
         if(shooterSpeed > .7) {
             m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
+            funnyleds.ShooterReady();
         } else {
            m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .0);
+
+            if(Blinkin.isRed()){
+                funnyleds.LightsRed();
+            } else{
+                funnyleds.LightsBlue();
+            }
+            
         }
 
         if (m_driverController.getHID().getL2Button()) {
@@ -227,6 +245,16 @@ public class RobotContainer {
             m_robotDrive.ultraSlowModeOn();
         } else if (m_driverController.getHID().getR2ButtonReleased()) {
             m_robotDrive.ultraSlowModeOff();
+        }
+
+       if (m_driverController.getHID().getTriangleButton()) {
+            funnyleds.HumanPlayer();
+        } else if (m_driverController.getHID().getSquareButtonReleased()) {
+            if(Blinkin.isRed()){
+                funnyleds.LightsRed();
+            } else{
+                funnyleds.LightsBlue();
+            }
         }
         
         // OPERATOR JOYSTICK COMMANDS
