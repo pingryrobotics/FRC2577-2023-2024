@@ -110,6 +110,10 @@ public class Shooter extends SubsystemBase {
 		this.shooterSpeed = speed;
 	}
 
+	public int getShooterSpeed() {
+		return (int) shooterLeft.getEncoder().getVelocity();
+	}
+
 	// public void setAdjusterSpeed(double speed) {
 	// 	positionMode = false;
 	// 	// desiredPos = shooterAdjusterLeft.getEncoder().getPosition();

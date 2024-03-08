@@ -223,9 +223,10 @@ public class RobotContainer {
     public void containerPeriodic() {
 
         // DRIVE COMMANDS
-        double shooterSpeed = m_shooter.getSpeed();
+        int shooterSpeed =  m_shooter.getShooterSpeed();
+        SmartDashboard.putNumber("Shooter RPMS", shooterSpeed);
 
-        if(shooterSpeed > .7) {
+        if(shooterSpeed >= fullyLoadedRpm) {
             m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
             funnyleds.ShooterReady();
