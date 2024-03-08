@@ -99,6 +99,7 @@ public class MiddleTwoAuto extends SequentialCommandGroup {
         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false)),
         
         // shoot out
+        
         ShooterCommands.IndexForward(m_indexer),
         new WaitCommand(2),
 

@@ -66,7 +66,7 @@ public final class Constants {
     // public static final int kShooterAdjusterIZone = 0; // FINE TUNE VALUE
     // public static final double kShooterAdjusterMinOutput = -kShooterAdjusterSpeed; // FINE TUNE VALUE
     // public static final double kShooterAdjusterMaxOutput = kShooterAdjusterSpeed; // FINE TUNE VALUE
-    public static final int fullyLoadedRpm = 5700;
+    public static final int fullyLoadedRpm = 5700; ///random ahh number FINE TUNE AT COMP YEssSSIR
     public static final int kRampID = 51;
     public static final int kShooterLeftID = 31; // check
     public static final int kShooterRightID = 30; // check
