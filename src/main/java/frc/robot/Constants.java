@@ -33,13 +33,13 @@ public final class Constants {
     public static final double kShooterAutoSpeed = 0.7;
     // public static final double kShooterAdjusterSpeed = 0.4;
     // public static final double kShooterAdjusterAutoSpeed = 0.8;
-    public static final double kRampInSpeed = 0.2; // FINE TUNE values
+    public static final double kRampInSpeed = 0.3; // FINE TUNE values
     public static final double kRampOutSpeed = 0.3; // FINE TUNE values
     public static final double kIndexerSpeed = -0.5; // FINE TUNE
     public static final double kSlowdownMultiplier = 0.5;
     public static final double kClimberSpeed = 0.15;
 
-    public static final double kIntakeDown = -16; // FINE TUNE VALUE 21.3
+    public static final double kIntakeDown = -0.25; // FINE TUNE VALUE 21.3
     public static final double kIntakeUp = 0;
 
     // public static final double kShooterAdjusterLow = 0; // FINE TUNE VALUE
@@ -47,10 +47,10 @@ public final class Constants {
     // public static final double kShooterAdjusterHigh = 140; // FINE TUNE VALUE
     
     // PID values for intake flipper
-    public static final double kIntakeP = 0.1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
+    public static final double kIntakeP = 1; // FINE TUNE VALUE; increase if not moving, decrease if oscillating
     public static final double kIntakeI = 1e-4; // FINE TUNE VALUE; should be around 0.1x P and makes the movement 
                                               // less smooth but faster
-    public static final double kIntakeD = 1; // FINE TUNE VALUE; should be around 10x P
+    public static final double kIntakeD = 0; // FINE TUNE VALUE; should be around 10x P
     public static final double kIntakeFF = 0.0; // FINE TUNE VALUE
     public static final int kIntakeIZone = 0; // FINE TUNE VALUE
     public static final double kIntakeMinOutput = -0.05; // FINE TUNE VALUE
@@ -66,7 +66,7 @@ public final class Constants {
     // public static final int kShooterAdjusterIZone = 0; // FINE TUNE VALUE
     // public static final double kShooterAdjusterMinOutput = -kShooterAdjusterSpeed; // FINE TUNE VALUE
     // public static final double kShooterAdjusterMaxOutput = kShooterAdjusterSpeed; // FINE TUNE VALUE
-    public static final int fullyLoadedRpm = 5700; ///random ahh number FINE TUNE AT COMP YEssSSIR
+    public static final int fullyLoadedRpm = 3700; ///random ahh number FINE TUNE AT COMP YEssSSIR
     public static final int kRampID = 51;
     public static final int kShooterLeftID = 31; // check
     public static final int kShooterRightID = 30; // check

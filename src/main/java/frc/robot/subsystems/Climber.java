@@ -21,7 +21,7 @@ public class Climber extends SubsystemBase {
     public Climber(DoubleSolenoid clawSolenoid) {
         this.clawSolenoid = clawSolenoid;
         compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-        this.clawSolenoid.set(DoubleSolenoid.Value.kForward);
+        this.clawSolenoid.set(DoubleSolenoid.Value.kReverse);
         SmartDashboard.putBoolean("Has closed", false);
 
     }

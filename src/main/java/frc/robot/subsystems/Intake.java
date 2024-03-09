@@ -81,10 +81,11 @@ public class Intake extends SubsystemBase {
 		// intakeFlipMotor.getPIDController().setReference(1000, ControlType.kPosition);
 		SmartDashboard.putNumber("max output", m_pid.getOutputMax());
 		SmartDashboard.putNumber("min output", m_pid.getOutputMin());
+		intakeFlipMotor.set(flipSpeed);
 
 		if (positionMode) {
 			// SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
-			intakeFlipMotor.set(m_pidController.calculate(currPos, desiredPos));
+			//ntakeFlipMotor.set(m_pidController.calculate(currPos, desiredPos));
 		} else {
 			intakeFlipMotor.set(flipSpeed);
 		}

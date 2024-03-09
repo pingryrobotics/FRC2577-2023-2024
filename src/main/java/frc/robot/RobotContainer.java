@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.MechanismConstants;
@@ -155,7 +156,7 @@ public class RobotContainer {
      * created by
      * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
      * subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then callingx
      * passing it to a
      * {@link JoystickButton}.
      */
@@ -163,8 +164,12 @@ public class RobotContainer {
 
         // INTAKE/RAMP COMMANDS
 
-        m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
-        m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
+
+        m_operatorController.cross().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(0.1),()->m_intake.setFlipSpeed(0)));
+        m_operatorController.triangle().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(-0.1),()->m_intake.setFlipSpeed(0)));
+
+        //m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
+        //m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
 
         m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
         m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
