@@ -6,59 +6,38 @@ package frc.robot;
 
 // commented because i don't like seeing yellow dots on my sidebar - christian
 //import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
-
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS5Controller.Button;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-
-import frc.robot.Constants.AutoConstants;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.MechanismConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-
-import frc.robot.commands.autos.DoNothingAuto;
-import frc.robot.commands.autos.LeftSideAuto;
-import frc.robot.commands.autos.MiddleTwoAuto;
-import frc.robot.commands.autos.RightSideAuto;
-import frc.robot.commands.autos.OneNoteParkAuto;
-import frc.robot.commands.climber_commands.Climb;
+import frc.robot.commands.autos.*;
 import frc.robot.commands.intake_commands.IntakeCommands;
 import frc.robot.commands.shooter_commands.ShooterCommands;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Blinkin;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Ramp;
-
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.revrobotics.CANSparkMax;
-
 /*
-* This class is where the bulk of the robot should be declared.  Since Command-based is a
-* "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
-* periodic methods (other than the scheduler calls).  Instead, the structure of the robot
-* (including subsystems, commands, and button mappings) should be declared here.
-*/
+ * This class is where the bulk of the robot should be declared.  Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+ * (including subsystems, commands, and button mappings) should be declared here.
+ */
 public class RobotContainer {
 
     // The robot's subsystems
@@ -73,6 +52,8 @@ public class RobotContainer {
     private final Ramp m_ramp = new Ramp(new CANSparkMax(MechanismConstants.kRampID, CANSparkMax.MotorType.kBrushless));
     private final Indexer m_indexer = new Indexer(
             new CANSparkMax(MechanismConstants.kIndexerID, CANSparkMax.MotorType.kBrushless));
+
+    private final Climber m_climber = new Climber(new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1));
     // private final Climber m_climber = new Climber(
     //         new CANSparkMax(MechanismConstants.kLeftClimberID, CANSparkMax.MotorType.kBrushless),
     //         new CANSparkMax(MechanismConstants.kRightClimberID, CANSparkMax.MotorType.kBrushless));
@@ -109,39 +90,39 @@ public class RobotContainer {
 
         SmartDashboard.putData("Side", side_chooser);
 
-        if(Blinkin.isRed()){
+        if (Blinkin.isRed()) {
             funnyleds.LightsRed();
-        } else{
+        } else {
             funnyleds.LightsBlue();
         }
 
         m_robotDrive.setDefaultCommand(
-            // The left stick controls translation of the robot.
-            // Turning is controlled by the X axis of the right stick.
-            new RunCommand(
-                    () -> m_robotDrive.drive(
+                // The left stick controls translation of the robot.
+                // Turning is controlled by the X axis of the right stick.
+                new RunCommand(
+                        () -> m_robotDrive.drive(
                                 -MathUtil
                                         .applyDeadband(
                                                 m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1)
                                                         * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
                                                 OIConstants.kDriveDeadband),
-                        
+
                                 -MathUtil
                                         .applyDeadband(
                                                 m_driverController.getLeftX() * (m_robotDrive.m_slowMode ? 0.4 : 1)
                                                         * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
                                                 OIConstants.kDriveDeadband),
-                        
+
                                 -MathUtil
                                         .applyDeadband(
                                                 m_driverController.getRightX() * (m_robotDrive.m_slowMode ? 0.4 : 1)
                                                         * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
                                                 OIConstants.kDriveDeadband),
-                        
-                        true, false),
+
+                                true, false),
                         m_robotDrive));
-            
-        
+
+
         // // Add commands to Autonomous Sendable Chooser
         m_chooser.setDefaultOption("Do Nothing", new DoNothingAuto(m_robotDrive));
         m_chooser.addOption("Side 3 Note Auto",
@@ -150,9 +131,9 @@ public class RobotContainer {
                 new OneNoteParkAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false));
         m_chooser.addOption("park",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, false, false, false, true));
-        m_chooser.addOption("Right 1 Note Auto No Park", 
+        m_chooser.addOption("Right 1 Note Auto No Park",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, false));
-        m_chooser.addOption("Right 1 Note Auto Park", 
+        m_chooser.addOption("Right 1 Note Auto Park",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, false, false, true));
         m_chooser.addOption("Right Two Note Auto",
                 new RightSideAuto(m_robotDrive, m_shooter, m_indexer, m_intake, m_ramp, side_chooser, true, true, false, false));
@@ -181,7 +162,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         // INTAKE/RAMP COMMANDS
-          
+
         m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
         m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
 
@@ -191,6 +172,9 @@ public class RobotContainer {
         m_operatorController.circle().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
 
         // SHOOTER ADJUSTMENT COMMANDS
+
+        m_driverController.povDown().onTrue(m_climber.downCommand());
+        m_driverController.povUp().onTrue(m_climber.upCommand());
 
         // // UP POV
         // m_operatorController.pov(0).onTrue(ShooterCommands.AdjustShooterHigh(m_shooter)); // shooter adjust to high
@@ -223,23 +207,23 @@ public class RobotContainer {
     public void containerPeriodic() {
 
         // DRIVE COMMANDS
-        int shooterSpeed =  m_shooter.getShooterSpeed();
+        int shooterSpeed = m_shooter.getShooterSpeed();
         SmartDashboard.putNumber("Shooter RPMS", shooterSpeed);
 
-        if(shooterSpeed >= MechanismConstants.fullyLoadedRpm){
+        if (shooterSpeed >= MechanismConstants.fullyLoadedRpm) {
             m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
             funnyleds.ShooterReady();
         } else {
-           m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
+            m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .0);
 
-            if(Blinkin.isRed()){
+            if (Blinkin.isRed()) {
                 funnyleds.LightsRed();
-            } else{
+            } else {
                 funnyleds.LightsBlue();
             }
-            
+
         }
 
         if (m_driverController.getHID().getL2Button()) {
@@ -248,22 +232,22 @@ public class RobotContainer {
             m_robotDrive.slowModeOff();
         }
 
-       if (m_driverController.getHID().getR2Button()) {
+        if (m_driverController.getHID().getR2Button()) {
             m_robotDrive.ultraSlowModeOn();
         } else if (m_driverController.getHID().getR2ButtonReleased()) {
             m_robotDrive.ultraSlowModeOff();
         }
 
-       if (m_driverController.getHID().getTriangleButton()) {
+        if (m_driverController.getHID().getTriangleButton()) {
             funnyleds.HumanPlayer();
         } else if (m_driverController.getHID().getSquareButtonReleased()) {
-            if(Blinkin.isRed()){
+            if (Blinkin.isRed()) {
                 funnyleds.LightsRed();
-            } else{
+            } else {
                 funnyleds.LightsBlue();
             }
         }
-        
+
         // OPERATOR JOYSTICK COMMANDS
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
         if (-m_operatorController.getLeftY() > 0.2) { // moving joystick down is positive
