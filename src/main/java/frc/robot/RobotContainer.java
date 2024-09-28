@@ -104,13 +104,13 @@ public class RobotContainer {
                         () -> m_robotDrive.drive(
                                 -MathUtil
                                         .applyDeadband(
-                                                m_driverController.getLeftY() * (m_robotDrive.m_slowMode ? 0.4 : 1)
+                                                m_driverController.getLeftY() * -1 * (m_robotDrive.m_slowMode ? 0.4 : 1)
                                                         * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
                                                 OIConstants.kDriveDeadband),
 
                                 -MathUtil
                                         .applyDeadband(
-                                                m_driverController.getLeftX() * (m_robotDrive.m_slowMode ? 0.4 : 1)
+                                                m_driverController.getLeftX() * -1 * (m_robotDrive.m_slowMode ? 0.4 : 1)
                                                         * (m_robotDrive.m_ultraSlowMode ? 0.5 : 1),
                                                 OIConstants.kDriveDeadband),
 
@@ -165,23 +165,17 @@ public class RobotContainer {
         // INTAKE/RAMP COMMANDS
 
 
-        m_operatorController.cross().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(0.1),()->m_intake.setFlipSpeed(0)));
-        m_operatorController.triangle().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(-0.1),()->m_intake.setFlipSpeed(0)));
+        m_operatorController.triangle().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(1),()->m_intake.setFlipSpeed(0)));
+        m_operatorController.cross().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(-1),()->m_intake.setFlipSpeed(0)));
 
         //m_operatorController.cross().onTrue(IntakeCommands.IntakeUp(m_intake)); // intake up PID
         //m_operatorController.triangle().onTrue(IntakeCommands.IntakeDown(m_intake)); // intake down PID
 
-        m_operatorController.square().onTrue(IntakeCommands.IntakeRampIn(m_intake, m_ramp)); // intake & ramp wheels in
-        m_operatorController.square().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
-        m_operatorController.circle().onTrue(IntakeCommands.IntakeRampOut(m_intake, m_ramp)); // intake & ramp wheels out
-        m_operatorController.circle().onFalse(IntakeCommands.IntakeRampStop(m_intake, m_ramp)); // intake & ramp wheels stop
-
+        
         // SHOOTER ADJUSTMENT COMMANDS
 
-        m_driverController.povDown().onTrue(m_climber.downCommand());
-        m_driverController.povUp().onTrue(m_climber.upCommand());
 
-        // // UP POV
+        // UP POV
         // m_operatorController.pov(0).onTrue(ShooterCommands.AdjustShooterHigh(m_shooter)); // shooter adjust to high
         // // RIGHT POV
         // m_operatorController.pov(90).onTrue(ShooterCommands.AdjustShooterMid(m_shooter)); // shooter adjust to mid
@@ -190,20 +184,47 @@ public class RobotContainer {
 
         // SHOOTER COMMANDS
 
+        // Not needed maybe?
         m_operatorController.L1().onTrue(ShooterCommands.ShootReverse(m_shooter)); // shooter on
         m_operatorController.L1().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
-        m_operatorController.R1().onTrue(ShooterCommands.IndexReverse(m_indexer)); // indexer out
-        m_operatorController.R1().onFalse(ShooterCommands.StopIndexer(m_indexer)); // indexer stop
 
+        // Rev shooter
+        m_operatorController.L2().onTrue(ShooterCommands.ShootForward(m_shooter)); // shooter on
+        m_operatorController.L2().onFalse(ShooterCommands.StopShooter(m_shooter)); // shooter off
+        
+        // Fire away
+        m_operatorController.R2().onTrue(IntakeCommands.IntakeIn(m_intake)); // indexer out
+        m_operatorController.R2().onFalse(IntakeCommands.StopIntake(m_intake)); // indexer stop
+        m_operatorController.R2().whileTrue(new StartEndCommand(() -> m_intake.setFlipSpeed(1),()->m_intake.setFlipSpeed(0)));
+
+        // Pull it in (exta button )
+        m_operatorController.circle().onTrue(IntakeCommands.IntakeOut(m_intake)); // indexer in
+        m_operatorController.circle().onFalse(IntakeCommands.StopIntake(m_intake)); // indexer stop
+
+        // Intaking from the source (spins everything backwards)
+        m_operatorController.R1().onTrue(IntakeCommands.IntakeIn(m_intake)); // Spins intake backwards
+        m_operatorController.R1().onTrue(ShooterCommands.ShootReverse(m_shooter)); // Spins shooter backwards
+
+        m_operatorController.R1().onFalse(IntakeCommands.StopIntake(m_intake)); // Spins intake backwards
+        m_operatorController.R1().onFalse(ShooterCommands.StopShooter(m_shooter)); // Spins shooter backwards
+
+
+        
+         
+
+
+        
         m_operatorController.share().onTrue(new InstantCommand(() -> resetEncoders()));
+
+
 
         //old alan code
         //m_operatorController.touchpad().onTrue(ShooterCommands.ShootAndIndex(m_shooter, m_indexer));
 
         //new jame code
-        m_operatorController.touchpad().onTrue(ShooterCommands.ShootForward(m_shooter));
+        //m_operatorController.touchpad().onTrue(ShooterCommands.ShootForward(m_shooter));
 
-        m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+        //m_driverController.share().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
         // m_driverController.square().onTrue(new Climb(m_climber, MechanismConstants.kClimberSpeed));
         // m_driverController.square().onFalse(new Climb(m_climber, 0));
@@ -216,9 +237,12 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter RPMS", shooterSpeed);
 
         if (shooterSpeed >= MechanismConstants.fullyLoadedRpm) {
-            m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
-            m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
+            //m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .5);
+            //m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .5);
             funnyleds.ShooterReady();
+            
+
+
         } else {
             m_operatorController.getHID().setRumble(RumbleType.kLeftRumble, .0);
             m_operatorController.getHID().setRumble(RumbleType.kRightRumble, .0);
@@ -245,6 +269,7 @@ public class RobotContainer {
 
         if (m_driverController.getHID().getTriangleButton()) {
             funnyleds.HumanPlayer();
+
         } else if (m_driverController.getHID().getSquareButtonReleased()) {
             if (Blinkin.isRed()) {
                 funnyleds.LightsRed();
@@ -255,6 +280,11 @@ public class RobotContainer {
 
         // OPERATOR JOYSTICK COMMANDS
         // purpose of having it here is to be able to track when the joystick passes a certain threshold or goes under a certain threshold (we only want to track the transition)
+        
+        /* 
+
+        Som says this can go bye bye
+
         if (-m_operatorController.getLeftY() > 0.2) { // moving joystick down is positive
             double flipSpeed = -m_operatorController.getLeftY() * MechanismConstants.kIntakeFlipUpSpeed;
             m_intake.setFlipSpeed(flipSpeed);
@@ -269,7 +299,10 @@ public class RobotContainer {
                 buttonStates.put("operatorLeftJoystick", false);
             }
         }
-
+        */
+        
+        
+        // this too
         // if (Math.abs(m_operatorController.getRightY()) > 0.1) {
         //     double adjusterSpeed = m_operatorController.getRightY() * MechanismConstants.kShooterAdjusterSpeed;
         //     m_shooter.setAdjusterSpeed(adjusterSpeed);
@@ -283,21 +316,25 @@ public class RobotContainer {
 
         // OPERATOR CONTROLLER COMMANDS
 
+        /* 
         if (m_operatorController.getHID().getL2Button()) {
             m_shooter.setSpeed(MechanismConstants.kShooterSpeed * m_operatorController.getHID().getL2Axis());
         } else if (m_operatorController.getHID().getL2ButtonReleased()) {
             m_shooter.setSpeed(0);
         }
 
+
+        
+
         if (m_operatorController.getHID().getR2Button()) {
             m_indexer.setSpeed(MechanismConstants.kIndexerSpeed * m_operatorController.getHID().getR2Axis());
-            m_intake.setSpeed(MechanismConstants.kIntakeInSpeed * m_operatorController.getHID().getR2Axis());
         } else if (m_operatorController.getHID().getR2ButtonReleased()) {
-            m_indexer.setSpeed(0);
-            m_intake.setSpeed(0);
-            m_shooter.setSpeed(0);
+            m_indexer.setSpeed(-1);
         }
-
+        else{
+            m_indexer.setSpeed(0);
+        }
+        */
     }
 
     /**

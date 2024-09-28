@@ -27,7 +27,7 @@ public class ShooterCommands {
     }
 
     public static Command ShootReverse(Shooter m_shooter) {
-        return new Shoot(m_shooter, -MechanismConstants.kShooterSpeed);
+        return new Shoot(m_shooter, -MechanismConstants.kShooterSpeed*0.5);
     }
 
     public static Command IndexForward(Indexer m_indexer) {

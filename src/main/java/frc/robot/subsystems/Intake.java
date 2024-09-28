@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MechanismConstants;
 
+import com.fasterxml.jackson.databind.type.PlaceholderForType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -81,16 +82,23 @@ public class Intake extends SubsystemBase {
 		// intakeFlipMotor.getPIDController().setReference(1000, ControlType.kPosition);
 		SmartDashboard.putNumber("max output", m_pid.getOutputMax());
 		SmartDashboard.putNumber("min output", m_pid.getOutputMin());
+
+		// double threshold = 10; //what you dont want it to go past
+		// if (currPos >= threshold && flipSpeed < 0) {
+		// 	flipSpeed = 0;
+		// } else if (currPos <=0 && flipSpeed > 0) {
+		// 	flipSpeed = 0;
+		// }
 		intakeFlipMotor.set(flipSpeed);
 
-		if (positionMode) {
-			// SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
-			//ntakeFlipMotor.set(m_pidController.calculate(currPos, desiredPos));
-		} else {
-			intakeFlipMotor.set(flipSpeed);
-		}
+		// if (positionMode) {
+		// 	// SmartDashboard.putBoolean("PID worked", m_pid.setReference(desiredPos, ControlType.kPosition).equals(REVLibError.kOk));
+		// 	//ntakeFlipMotor.set(m_pidController.calculate(currPos, desiredPos));
+		// } else {
+		// 	intakeFlipMotor.set(flipSpeed);
+		// }	
 
-		SmartDashboard.putNumber("Intake motor speed", intakeFlipMotor.getAppliedOutput());
+		SmartDashboard.putNumber("Intake motor pos", currPos);
 	}
 
 	public void setSpeed(double speed) {
@@ -100,6 +108,8 @@ public class Intake extends SubsystemBase {
 	public void setPosition(double pos) {
 		positionMode = true;
 		desiredPos = pos;
+		intakeFlipMotor.getEncoder().setPosition(pos);
+
 	}
 
 	public void setFlipSpeed(double speed) {
@@ -110,5 +120,8 @@ public class Intake extends SubsystemBase {
 
 	public void resetEncoder() {
 		intakeFlipMotor.getEncoder().setPosition(0);
+	}
+	public double womp(){
+		return intakeFlipMotor.getEncoder().getPosition();
 	}
 }

@@ -18,7 +18,7 @@ import com.revrobotics.SparkPIDController;
 import frc.robot.Constants.MechanismConstants;
 
 public class Indexer extends SubsystemBase {
-	private CANSparkMax indexerMotor;
+	public CANSparkMax indexerMotor;
 
 	/**
 	 * Creates a new ExampleSubsystem.
